@@ -22,6 +22,14 @@ enum
 	NUMBER_OF_SCENARIO_OBJECT_LOCATION_PLACEMENT_FLAGS,
 };
 
+enum
+{
+	_equipment_created_at_rest_bit = 0,
+	_equipment_obsolete_bit,
+	_equipment_does_accelerate_bit,
+	NUMBER_OF_SCENARIO_EQUIPMENT_FLAGS,
+};
+
 /* ---------- macros */
 
 /* ---------- structures */
@@ -61,6 +69,55 @@ struct scenario_scenery_datum
 struct scenario_placeholder_datum
 {
 	struct scenario_object_datum object;
+};
+
+struct scenario_equipment_datum
+{
+	struct scenario_object_datum object;
+};
+
+struct scenario_device_group
+{
+	char name[TAG_STRING_LENGTH+1];
+	real initial_value;
+	unsigned long flags;
+	unsigned long unused[3];
+};
+
+struct scenario_device_datum
+{
+	short power_group_index;
+	short position_group_index;
+	unsigned long flags;
+};
+
+struct scenario_machine_datum
+{
+	struct scenario_object_datum object;
+	struct scenario_device_datum device;
+	unsigned long flags;
+	unsigned long unused[3];
+};
+
+struct scenario_control_datum
+{
+	struct scenario_object_datum object;
+	struct scenario_device_datum device;
+	unsigned long flags;
+	short hud_override_string_list_index;
+	short pad;
+	unsigned long unused[2];
+};
+
+struct scenario_light_fixture_datum
+{
+	struct scenario_object_datum object;
+	struct scenario_device_datum device;
+	real_rgb_color color;
+	real intensity;
+	real falloff_angle;
+	real cutoff_angle;
+	unsigned long unused[4];
 };
 
 struct scenario_object_name
