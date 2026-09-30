@@ -401,7 +401,7 @@ static long weapon_effect_new(
 static void weapon_reset(
 	long weapon_index)
 {
-	long magazine_index;
+	short magazine_index;
 
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
