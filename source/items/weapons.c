@@ -401,15 +401,16 @@ static long weapon_effect_new(
 static void weapon_reset(
 	long weapon_index)
 {
+	short trigger_index;
 	short magazine_index;
 
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
-	for (magazine_index = 0; magazine_index<weapon_definition->weapon.triggers.count; ++magazine_index)
+	for (trigger_index = 0; trigger_index<weapon_definition->weapon.triggers.count; ++trigger_index)
 	{
-		struct weapon_trigger* trigger = weapon_trigger_get(weapon, magazine_index);
-		struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, magazine_index, struct weapon_trigger_definition);
+		struct weapon_trigger* trigger = weapon_trigger_get(weapon, trigger_index);
+		struct weapon_trigger_definition *trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
 
 		trigger->state = _trigger_uninitialized;
 		trigger->state_timer = 0;
