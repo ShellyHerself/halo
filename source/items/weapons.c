@@ -444,7 +444,7 @@ static boolean weapon_state_interruptable(short old_state, short new_state)
 	{
 		interruptable = TRUE;
 	}
-	else if (old_state>_weapon_state_idle && old_state<=_weapon_state_secondary_recoil && new_state >= old_state)
+	if (old_state>_weapon_state_idle && old_state<=_weapon_state_secondary_recoil && new_state >= old_state)
 	{
 		interruptable = TRUE;
 	}
@@ -465,12 +465,49 @@ static boolean weapon_set_state(
 	if (immediate || weapon_state_interruptable(weapon->weapon.state, new_state))
 	{
 		long owner_object_index;
+		long new_animation_index;
+		if (weapon_definition->object.animation_graph.index != NONE) {
+			struct animation_graph* animation_graph = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
+			switch (new_state) {
+				case _weapon_state_idle:
+					new_animation_index = 0;
+					break;
+				case _weapon_state_primary_recoil:
+              		new_animation_index = 9;
+					break;
+				case _weapon_state_secondary_recoil:
+					new_animation_index = 10;
+					break;
+				case _weapon_state_primary_chamber:
+					new_animation_index = 5;
+					break;
+				case _weapon_state_secondary_chamber:
+					new_animation_index = 6;
+					break;
+				case _weapon_state_primary_reload:
+				case _weapon_state_secondary_reload:
+					new_animation_index = 3;
+					break;
+				case _weapon_state_primary_charged:
+				case _weapon_state_secondary_charged:
+					new_animation_index = 8;
+					break;
+				case _weapon_state_ready:
+					new_animation_index = 1;
+					break;
+				case _weapon_state_put_away:
+					new_animation_index = 2;
+					break;
+			}
 
-		{
+			//
+			// TODO: Things need to happen here
+			//
 
+			weapon->object.animation.state.index = animation_choose_random_permutation_internal(
+				1, weapon_definition->object.animation_graph.index, new_animation_index
+			);
 		}
-
-
 
 		owner_object_index = weapon_get_owner_object_index(weapon_index);
 		if (unit_try_and_get(owner_object_index))
