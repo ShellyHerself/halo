@@ -468,6 +468,7 @@ static boolean weapon_set_state(
 		long new_animation_index;
 		if (weapon_definition->object.animation_graph.index != NONE) {
 			struct animation_graph* animation_graph = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
+			// TODO: Use proper enum for new animation index here
 			switch (new_state) {
 				case _weapon_state_idle:
 					new_animation_index = 0;
