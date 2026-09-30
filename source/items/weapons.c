@@ -444,7 +444,7 @@ static boolean weapon_state_interruptable(short old_state, short new_state)
 	{
 		interruptable = TRUE;
 	}
-	if (old_state>_weapon_state_idle && old_state<=_weapon_state_secondary_recoil && new_state >= old_state)
+	else if (old_state>_weapon_state_idle && old_state<=_weapon_state_secondary_recoil && new_state >= old_state)
 	{
 		interruptable = TRUE;
 	}
