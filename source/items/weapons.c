@@ -423,7 +423,7 @@ static void weapon_reset(
 
 		if (magazine->state==_magazine_reloading)
 		{
-			if (2*magazine->state_timer<weapon_magazine_start_reload(weapon_index, 0, 7, NONE))
+			if (2*magazine->state_timer<weapon_get_first_person_animation_time(weapon_index, 0, 7, NONE))
 			{
 				weapon_magazine_finish_reload(weapon_index, magazine_index);
 			}
