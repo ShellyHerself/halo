@@ -331,6 +331,17 @@ void weapon_set_integrated_light_power(const long weapon_index, const real light
 	return;
 }
 
+real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real target_distance)
+{
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon_get(weapon_index)->definition_index);
+	real result = 0.0f;
+	if (trigger_index >= 0 && trigger_index < weapon_definition->weapon.triggers.count) {
+		struct weapon_trigger_definition* weapon_trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
+		result = projectile_estimate_time_to_target(tag_get('proj', weapon_trigger_definition->projectile.index), target_distance);
+	}
+	return result;
+}
+
 void weapon_ready(
 	long weapon_index)
 {
