@@ -413,12 +413,15 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 		penalty = weapon_definition->weapon.sideways_movement_penalty;
 	}
 	movement_penalty_mode = weapon_definition->weapon.movement_penalty_mode;
-	if (
-		(movement_penalty_mode == _weapon_movement_penalty_when_zoomed ||
-		movement_penalty_mode == _weapon_movement_penalty_when_zoomed_or_reloading &&
-		(weapon->weapon.magazines[0].state == _magazine_reloading || weapon->weapon.magazines[1].state == _magazine_reloading)) && !zoomed
-	) {
-		penalty = 0.f;
+
+	if (movement_penalty_mode == _weapon_movement_penalty_when_zoomed && !zoomed) {
+		penalty = 0;
+	}	
+	else if (
+		(movement_penalty_mode == _weapon_movement_penalty_when_zoomed_or_reloading &&
+		(weapon->weapon.magazines[0].state == _magazine_reloading || weapon->weapon.magazines[1].state == _magazine_reloading)
+	) && !zoomed) {
+		penalty = 0;
 	}
 	return penalty;
 }
