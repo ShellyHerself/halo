@@ -268,7 +268,7 @@ void weapons_dispose()
 }
 
 
-void weapon_place(long weapon_index, struct scenario_weapon_datum *scenario_weapon)
+void weapon_place(const long weapon_index, const struct scenario_weapon_datum *scenario_weapon)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -300,7 +300,7 @@ void weapon_place(long weapon_index, struct scenario_weapon_datum *scenario_weap
 	return;
 }
 
-void weapon_preprocess_node_orientations(int weapon_index, struct real_orientation *node_orientations)
+void weapon_preprocess_node_orientations(const long weapon_index, struct real_orientation *node_orientations)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition;
@@ -315,6 +315,14 @@ void weapon_preprocess_node_orientations(int weapon_index, struct real_orientati
 	}
 
 	return;
+}
+
+char const *weapon_get_label(const weapon_index) {
+	char const *label = "";
+	if (weapon_index != NONE) {
+		label = weapon_definition_get(weapon_get(weapon_index)->definition_index)->weapon.label;
+	}
+	return label;
 }
 
 void weapon_ready(
