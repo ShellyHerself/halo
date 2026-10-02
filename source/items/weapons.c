@@ -296,6 +296,8 @@ void weapon_place(long weapon_index, struct scenario_weapon_datum *scenario_weap
 	if (!TEST_FLAG(scenario_weapon->flags, _weapon_created_at_rest_bit)) {
 		weapon->object.position.z += 0.05f; // This might be a named const?
 	}
+
+	return;
 }
 
 void weapon_preprocess_node_orientations(int weapon_index, struct real_orientation *node_orientations)
