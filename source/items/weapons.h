@@ -18,6 +18,18 @@ header included in hcex build.
 
 enum
 {
+	_weapon_overheated_bit = 0,
+	_weapon_overheated_exit_bit,
+	_weapon_overheat_recoil_bit,
+	_weapon_needs_to_reload_bit,
+	_weapon_integrated_light_on_bit,
+	_weapon_multiplayer_inventory_flag,
+	_weapon_multiplayer_flag,
+	NUMBER_OF_WEAPON_FLAGS,
+};
+
+enum
+{
 	_weapon_state_idle = 0,
 	_weapon_state_primary_recoil,
 	_weapon_state_secondary_recoil,
