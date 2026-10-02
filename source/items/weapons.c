@@ -342,30 +342,36 @@ real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real
 	return result;
 }
 
+/* Used to determine if a weapon can ever be fired again. Used to determine if a weapon should be deleted in multiplayer */
 boolean weapon_can_be_fired(const long weapon_index) {
     struct weapon_datum *weapon = weapon_get(weapon_index);
   	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
+	boolean result;
+
     // Weapons that use battery/age can't be refilled so they cannot be fired again
     if (weapon->weapon.age >= 1.0f)
-        return FALSE;
+        result = FALSE;
 
     // If not in multiplayer a player might pick up new ammo for a weapon. So it can technically be fired
-    if (!game_engine_running())
-        return TRUE;
+    else if (!game_engine_running())
+        result = TRUE;
 
     // Weapons that can't have ammo can still be "fired"
-    if (weapon_definition->weapon.magazines.count <= 0)
-        return TRUE;
-    if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
-        return TRUE;
-    if (weapon->weapon.magazines[0].rounds_loaded != 0)
-        return TRUE;
-    if (weapon->weapon.magazines[0].rounds_total != 0)
-        return TRUE;
+    else if (weapon_definition->weapon.magazines.count <= 0)
+        result = TRUE;
+    else if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
+        result = TRUE;
+    else if (weapon->weapon.magazines[0].rounds_loaded > 0)
+        result = TRUE;
+    else if (weapon->weapon.magazines[0].rounds_total > 0)
+        result = TRUE;
+	else
+		result = FALSE;
 
-    return FALSE;
+    return result;
 }
+
 
 void weapon_ready(
 	long weapon_index)
