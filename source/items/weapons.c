@@ -251,6 +251,22 @@ static struct profile_section weapon_update_section = {"weapon_update", NONE, TR
 
 /* ---------- public code */
 
+void weapons_initialize()
+{
+}
+
+void weapons_initialize_for_new_map()
+{
+}
+
+void weapons_dispose_from_old_map()
+{
+}
+
+void weapons_dispose()
+{
+}
+
 void weapon_ready(
 	long weapon_index)
 {

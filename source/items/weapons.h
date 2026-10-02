@@ -180,6 +180,11 @@ struct weapon_datum
 
 /* ---------- prototypes/WEAPONS.C */
 
+void weapons_initialize();
+void weapons_initialize_for_new_map();
+void weapons_dispose_from_old_map();
+void weapons_dispose();
+
 boolean weapon_must_be_readied(long weapon_index);
 boolean weapon_is_flag(long weapon_index);
 
