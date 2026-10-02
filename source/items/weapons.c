@@ -421,6 +421,12 @@ boolean weapon_must_be_readied(const long weapon_index) {
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
+boolean weapon_is_flag(const long weapon_index) {
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
+	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
+}
+
 void weapon_ready(
 	long weapon_index)
 {
