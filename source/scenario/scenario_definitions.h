@@ -30,6 +30,14 @@ enum
 	NUMBER_OF_SCENARIO_EQUIPMENT_FLAGS,
 };
 
+enum
+{
+  _weapon_created_at_rest_bit = 0,
+  _weapon_obsolete_bit,
+  _weapon_does_accelerate_bit,
+  NUMBER_OF_SCENARIO_WEAPON_FLAGS,
+};
+
 /* ---------- macros */
 
 /* ---------- structures */
@@ -119,6 +127,18 @@ struct scenario_light_fixture_datum
 	real cutoff_angle;
 	unsigned long unused[4];
 };
+
+struct scenario_weapon_datum
+{
+  struct scenario_object_datum object;
+  struct scenario_object_permutation permutation;
+  short rounds_total;
+  short rounds_loaded;
+  unsigned short flags;
+  unsigned short pad;
+  unsigned int unused[3];
+};
+
 
 struct scenario_object_name
 {
