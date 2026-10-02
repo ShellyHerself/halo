@@ -267,6 +267,38 @@ void weapons_dispose()
 {
 }
 
+
+void weapon_place(long weapon_index, struct scenario_weapon_datum *scenario_weapon)
+{
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+	if ( weapon_definition->weapon.magazines.count > 0 )
+	{
+		struct weapon_magazine_definition *magazine =
+			TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition);
+
+		weapon->weapon.magazines[0].rounds_total =
+			scenario_weapon->rounds_total > magazine->rounds_total_maximum
+				? magazine->rounds_total_maximum
+				: scenario_weapon->rounds_total;
+
+		weapon->weapon.magazines[0].rounds_loaded =
+			scenario_weapon->rounds_loaded > magazine->rounds_loaded_maximum
+				? magazine->rounds_loaded_maximum
+				: scenario_weapon->rounds_loaded;
+	}
+
+	SET_FLAG(weapon->object.flags, 5, TEST_FLAG(scenario_weapon->flags, 0));
+	SET_FLAG(weapon->object.flags, 17, TRUE);
+	SET_FLAG(weapon->item.flags, 5, TEST_FLAG(scenario_weapon->flags, 2));
+	
+	if (!TEST_FLAG(scenario_weapon->flags, _weapon_created_at_rest_bit)) {
+		weapon->object.position.z += 0.05f; // This might be a named const?
+	}
+}
+
+
 void weapon_ready(
 	long weapon_index)
 {
