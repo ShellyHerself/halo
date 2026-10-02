@@ -207,6 +207,7 @@ boolean weapon_useful(const long weapon_index);
 real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed);
 boolean weapon_must_be_readied(long weapon_index);
 boolean weapon_is_flag(long weapon_index);
+boolean weapon_prevents_grenade_throwing(const long weapon_index);
 
 char const *weapon_get_label(long weapon_index);
 
