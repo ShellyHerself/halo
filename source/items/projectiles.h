@@ -14,6 +14,11 @@ header included in hcex build.
 
 /* ---------- constants */
 
+enum
+{
+	PROJECTILE_DEFINITION_TAG = 'proj',
+};
+
 /* ---------- macros */
 
 /* ---------- structures */

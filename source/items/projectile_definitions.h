@@ -16,6 +16,8 @@ header included in hcex build.
 
 /* ---------- macros */
 
+#define projectile_definition_get(index) ((struct projectile_definition *)tag_get(PROJECTILE_DEFINITION_TAG, index))
+
 /* ---------- structures */
 
 struct _projectile_definition
