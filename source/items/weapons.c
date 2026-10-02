@@ -404,7 +404,7 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 	real penalty;
-	short movement_penalty_mode;
+	long movement_penalty_mode;
 
 	if (forward) {
 		penalty = weapon_definition->weapon.forward_movement_penalty;
