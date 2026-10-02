@@ -372,6 +372,18 @@ boolean weapon_can_be_fired(const long weapon_index) {
     return result;
 }
 
+boolean weapon_useful(const long weapon_index) {
+	boolean result;
+
+	if (weapon_get(weapon_index)->weapon.age >= 1.0f) {
+		result = FALSE;
+	}
+	else {
+		result = TRUE;
+	}
+	
+	return result;
+}
 
 void weapon_ready(
 	long weapon_index)
