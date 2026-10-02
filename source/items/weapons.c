@@ -342,6 +342,31 @@ real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real
 	return result;
 }
 
+boolean weapon_can_be_fired(const long weapon_index) {
+    struct weapon_datum *weapon = weapon_get(weapon_index);
+  	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+    // Weapons that use battery/age can't be refilled so they cannot be fired again
+    if (weapon->weapon.age >= 1.0f)
+        return FALSE;
+
+    // If not in multiplayer a player might pick up new ammo for a weapon. So it can technically be fired
+    if (!game_engine_running())
+        return TRUE;
+
+    // Weapons that can't have ammo can still be "fired"
+    if (weapon_definition->weapon.magazines.count <= 0)
+        return TRUE;
+    if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
+        return TRUE;
+    if (weapon->weapon.magazines[0].rounds_loaded != 0)
+        return TRUE;
+    if (weapon->weapon.magazines[0].rounds_total != 0)
+        return TRUE;
+
+    return FALSE;
+}
+
 void weapon_ready(
 	long weapon_index)
 {
