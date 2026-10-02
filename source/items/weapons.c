@@ -400,6 +400,29 @@ void weapon_ready(
 	return;
 }
 
+real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed) {
+	struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	real penalty;
+	short movement_penalty_mode;
+
+	if (forward) {
+		penalty = weapon_definition->weapon.forward_movement_penalty;
+	}
+	else {
+		penalty = weapon_definition->weapon.sideways_movement_penalty;
+	}
+	movement_penalty_mode = weapon_definition->weapon.movement_penalty_mode;
+	if (
+		(movement_penalty_mode == _weapon_movement_penalty_when_zoomed ||
+		movement_penalty_mode == _weapon_movement_penalty_when_zoomed_or_reloading &&
+		(weapon->weapon.magazines[0].state == _magazine_reloading || weapon->weapon.magazines[1].state == _magazine_reloading)) && !zoomed
+	) {
+		penalty = 0.f;
+	}
+	return penalty;
+}
+
 boolean weapon_put_away(
 	long weapon_index,
 	boolean immediate)
