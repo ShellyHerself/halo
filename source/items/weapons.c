@@ -298,6 +298,18 @@ void weapon_place(long weapon_index, struct scenario_weapon_datum *scenario_weap
 	}
 }
 
+void weapon_preprocess_node_orientations(int weapon_index, struct real_orientation *node_orientations)
+{
+	struct weapon_datum *weapon; // eax
+	struct weapon_definition *weapon_definition; // eax
+	struct animation_graph *animation; // eax
+
+	weapon = (struct weapon_datum *)object_get_and_verify_type(weapon_index, 4);
+	weapon_definition = (struct weapon_definition *)tag_get('weap', weapon->definition_index);
+	animation = (struct animation_graph *)tag_get('antr', weapon_definition->object.animation_graph.index);
+	if ( animation->weapon_animations.count )
+		tag_block_get_element_with_size(&animation->weapon_animations, 0, 28);
+}
 
 void weapon_ready(
 	long weapon_index)
