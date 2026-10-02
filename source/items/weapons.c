@@ -411,7 +411,7 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 	return penalty;
 }
 
-boolean weapon_melee_attack(const long weapon_index) {
+void weapon_melee_attack(const long weapon_index) {
 	return;
 }
 
