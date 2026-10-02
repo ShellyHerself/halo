@@ -385,21 +385,6 @@ boolean weapon_useful(const long weapon_index) {
 	return result;
 }
 
-void weapon_ready(
-	long weapon_index)
-{
-	struct weapon_datum* weapon = weapon_get(weapon_index);
-	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
-
-	weapon_reset(weapon_index);
-	weapon_set_state(weapon_index, _weapon_state_ready, TRUE);
-	first_person_weapon_message_from_weapon(weapon_index, _first_person_weapon_message_ready);
-	weapon_effect_new(weapon_index, weapon_definition->weapon.ready_effect.index, 0.f, 0.f);
-	weapon->weapon.state_timer = weapon_get_first_person_animation_time(weapon_index, 0, _first_person_weapon_animation_ready, NONE);
-
-	return;
-}
-
 real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed) {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -425,6 +410,22 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 	}
 	return penalty;
 }
+
+void weapon_ready(
+	long weapon_index)
+{
+	struct weapon_datum* weapon = weapon_get(weapon_index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+
+	weapon_reset(weapon_index);
+	weapon_set_state(weapon_index, _weapon_state_ready, TRUE);
+	first_person_weapon_message_from_weapon(weapon_index, _first_person_weapon_message_ready);
+	weapon_effect_new(weapon_index, weapon_definition->weapon.ready_effect.index, 0.f, 0.f);
+	weapon->weapon.state_timer = weapon_get_first_person_animation_time(weapon_index, 0, _first_person_weapon_animation_ready, NONE);
+
+	return;
+}
+
 
 boolean weapon_put_away(
 	long weapon_index,
