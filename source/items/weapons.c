@@ -325,6 +325,12 @@ char const *weapon_get_label(const weapon_index) {
 	return label;
 }
 
+void weapon_set_integrated_light_power(const long weapon_index, const real light_power)
+{
+	weapon_get(weapon_index)->weapon.integrated_light_power = light_power;
+	return;
+}
+
 void weapon_ready(
 	long weapon_index)
 {
