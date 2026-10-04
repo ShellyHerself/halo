@@ -643,11 +643,10 @@ static long weapon_effect_new(
 static void weapon_reset(
 	long weapon_index)
 {
-	short trigger_index;
-	short magazine_index;
-
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	short trigger_index;
+	short magazine_index;
 
 	for (trigger_index = 0; trigger_index<weapon_definition->weapon.triggers.count; ++trigger_index)
 	{
@@ -663,7 +662,7 @@ static void weapon_reset(
 		struct weapon_magazine *magazine = weapon_magazine_get(weapon, magazine_index);
 		struct weapon_magazine_definition *magazine_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, magazine_index, struct weapon_magazine_definition);
 
-		if (magazine->state==_magazine_reloading)
+		if (magazine->state == _magazine_reloading)
 		{
 			// Need an enum value for 'mode' here
 			if (2*magazine->state_timer<weapon_get_first_person_animation_time(weapon_index, 0, _first_person_weapon_message_shotgun_enter_reload, NONE))
