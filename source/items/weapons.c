@@ -358,38 +358,38 @@ real weapon_estimate_time_to_target(
 /* Used to determine if a weapon can ever be fired again. Used to determine if a weapon should be deleted in multiplayer */
 boolean weapon_can_be_fired(long weapon_index)
 {
-    struct weapon_datum *weapon = weapon_get(weapon_index);
+	struct weapon_datum *weapon = weapon_get(weapon_index);
   	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
 	boolean result;
 
-    // Weapons that use battery/age can't be refilled so they cannot be fired again
-    if (weapon->weapon.age >= 1.0f)
+	// Weapons that use battery/age can't be refilled so they cannot be fired again
+	if (weapon->weapon.age >= 1.0f)
 	{
-        result = FALSE;
+		result = FALSE;
 	}
 
-    // If not in multiplayer a player might pick up new ammo for a weapon. So it can technically be fired
-    else if (!game_engine_running())
+	// If not in multiplayer a player might pick up new ammo for a weapon. So it can technically be fired
+	else if (!game_engine_running())
 	{
-        result = TRUE;
+		result = TRUE;
 	}
 
-    // Weapons that can't have ammo can still be "fired"
-    else if (weapon_definition->weapon.magazines.count <= 0)
+	// Weapons that can't have ammo can still be "fired"
+	else if (weapon_definition->weapon.magazines.count <= 0)
 	{
-        result = TRUE;
-    }
-    else if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
-	{
-        result = TRUE;
+		result = TRUE;
 	}
-    else if (weapon->weapon.magazines[0].rounds_loaded > 0)
+	else if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
 	{
-        result = TRUE;
+		result = TRUE;
 	}
-    else if (weapon->weapon.magazines[0].rounds_total > 0)
-    {
+	else if (weapon->weapon.magazines[0].rounds_loaded > 0)
+	{
+		result = TRUE;
+	}
+	else if (weapon->weapon.magazines[0].rounds_total > 0)
+	{
 		result = TRUE;
 	}
 	else
@@ -397,7 +397,7 @@ boolean weapon_can_be_fired(long weapon_index)
 		result = FALSE;
 	}
 
-    return result;
+	return result;
 }
 
 boolean weapon_useful(long weapon_index)
@@ -405,7 +405,7 @@ boolean weapon_useful(long weapon_index)
 	boolean result;
 
 	if (weapon_get(weapon_index)->weapon.age >= 1.0f) 
-    {
+	{
 		result = FALSE;
 	}
 	else {
@@ -712,7 +712,7 @@ static boolean weapon_set_state(
 					new_animation_index = 0;
 					break;
 				case _weapon_state_primary_recoil:
-              		new_animation_index = 9;
+			  		new_animation_index = 9;
 					break;
 				case _weapon_state_secondary_recoil:
 					new_animation_index = 10;
