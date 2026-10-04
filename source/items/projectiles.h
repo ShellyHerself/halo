@@ -16,7 +16,8 @@ header included in hcex build.
 
 enum
 {
-	PROJECTILE_DEFINITION_TAG = 'proj',
+	PROJECTILE_DEFINITION_TAG = 'proj', // 0x70726F6A
+	PROJECTILE_DEFINITION_VERSION = 5, // 0x0005
 };
 
 /* ---------- macros */
