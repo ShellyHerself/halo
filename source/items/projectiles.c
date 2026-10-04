@@ -150,7 +150,9 @@ symbols in this file:
 
 /* ---------- public code */
 
-real projectile_estimate_time_to_target(const struct projectile_definition *projectile_definition, const real target_distance)
+real projectile_estimate_time_to_target(
+	struct projectile_definition const *projectile_definition,
+	real target_distance)
 {
 	real result = 0.f;
 	if (projectile_definition->projectile.initial_velocity > 0.0f) {
