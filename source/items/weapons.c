@@ -665,7 +665,8 @@ static void weapon_reset(
 
 		if (magazine->state==_magazine_reloading)
 		{
-			if (2*magazine->state_timer<weapon_get_first_person_animation_time(weapon_index, 0, 7, NONE))
+			// Need an enum value for 'mode' here
+			if (2*magazine->state_timer<weapon_get_first_person_animation_time(weapon_index, 0, _first_person_weapon_message_shotgun_enter_reload, NONE))
 			{
 				weapon_magazine_finish_reload(weapon_index, magazine_index);
 			}
