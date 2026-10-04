@@ -279,7 +279,7 @@ void weapon_place(
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
-	if ( weapon_definition->weapon.magazines.count > 0 )
+	if (weapon_definition->weapon.magazines.count > 0)
 	{
 		struct weapon_magazine_definition *magazine =
 			TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition);
