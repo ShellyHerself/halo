@@ -52,7 +52,7 @@ struct _projectile_definition
 	struct tag_reference detonation_damage;
 	struct tag_reference impact_damage;
 	long unused2[3];
-	struct tag_block material_responses;
+	struct tag_block material_responses; 			// projectile_material_response_definition
 };
 
 
