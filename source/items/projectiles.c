@@ -155,7 +155,8 @@ real projectile_estimate_time_to_target(
 	real target_distance)
 {
 	real result = 0.f;
-	if (projectile_definition->projectile.initial_velocity > 0.0f) {
+	if (projectile_definition->projectile.initial_velocity > 0.0f)
+	{
 		result = target_distance / projectile_definition->projectile.initial_velocity;
 	}
 	return result;
