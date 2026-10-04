@@ -321,9 +321,11 @@ void weapon_preprocess_node_orientations(const long weapon_index, struct real_or
 	return;
 }
 
-char const *weapon_get_label(const weapon_index) {
+char const *weapon_get_label(const weapon_index)
+{
 	char const *label = "";
-	if (weapon_index != NONE) {
+	if (weapon_index != NONE)
+	{
 		label = weapon_definition_get(weapon_get(weapon_index)->definition_index)->weapon.label;
 	}
 	return label;
@@ -339,7 +341,8 @@ real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real
 {
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon_get(weapon_index)->definition_index);
 	real result = 0.0f;
-	if (trigger_index >= 0 && trigger_index < weapon_definition->weapon.triggers.count) {
+	if (trigger_index >= 0 && trigger_index < weapon_definition->weapon.triggers.count)
+	{
 		struct weapon_trigger_definition* weapon_trigger_definition = TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.triggers, trigger_index, struct weapon_trigger_definition);
 		result = projectile_estimate_time_to_target(projectile_definition_get(weapon_trigger_definition->projectile.index), target_distance);
 	}
@@ -347,7 +350,8 @@ real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real
 }
 
 /* Used to determine if a weapon can ever be fired again. Used to determine if a weapon should be deleted in multiplayer */
-boolean weapon_can_be_fired(const long weapon_index) {
+boolean weapon_can_be_fired(const long weapon_index)
+{
     struct weapon_datum *weapon = weapon_get(weapon_index);
   	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
@@ -376,10 +380,12 @@ boolean weapon_can_be_fired(const long weapon_index) {
     return result;
 }
 
-boolean weapon_useful(const long weapon_index) {
+boolean weapon_useful(const long weapon_index)
+{
 	boolean result;
 
-	if (weapon_get(weapon_index)->weapon.age >= 1.0f) {
+	if (weapon_get(weapon_index)->weapon.age >= 1.0f) 
+{
 		result = FALSE;
 	}
 	else {
@@ -389,13 +395,15 @@ boolean weapon_useful(const long weapon_index) {
 	return result;
 }
 
-real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed) {
+real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed)
+{
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 	real penalty;
 	long movement_penalty_mode;
 
-	if (forward) {
+	if (forward)
+	{
 		penalty = weapon_definition->weapon.forward_movement_penalty;
 	}
 	else {
@@ -403,38 +411,45 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 	}
 	movement_penalty_mode = weapon_definition->weapon.movement_penalty_mode;
 
-	if (movement_penalty_mode == _weapon_movement_penalty_when_zoomed && !zoomed) {
+	if (movement_penalty_mode == _weapon_movement_penalty_when_zoomed && !zoomed)
+	{
 		penalty = 0;
 	}	
 	else if (
 		(movement_penalty_mode == _weapon_movement_penalty_when_zoomed_or_reloading &&
 		(weapon->weapon.magazines[0].state == _magazine_reloading || weapon->weapon.magazines[1].state == _magazine_reloading)
-	) && !zoomed) {
+	) && !zoomed)
+	{
 		penalty = 0;
 	}
 	return penalty;
 }
 
-void weapon_melee_attack(const long weapon_index) {
+void weapon_melee_attack(const long weapon_index)
+{
 	return;
 }
 
-boolean weapon_must_be_readied(const long weapon_index) {
+boolean weapon_must_be_readied(const long weapon_index)
+{
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_is_flag(const long weapon_index) {
+boolean weapon_is_flag(const long weapon_index)
+{
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_prevents_grenade_throwing(const long weapon_index) {
+boolean weapon_prevents_grenade_throwing(const long weapon_index)
+{
 	boolean does_it = TRUE;
 
-	if (weapon_index != NONE) {
+	if (weapon_index != NONE)
+	{
 		struct weapon_datum *weapon = weapon_get(weapon_index);
 		struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 
@@ -662,10 +677,12 @@ static boolean weapon_set_state(
 	{
 		long owner_object_index;
 		long new_animation_index;
-		if (weapon_definition->object.animation_graph.index != NONE) {
+		if (weapon_definition->object.animation_graph.index != NONE)
+		{
 			struct animation_graph* animation_graph = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
 			// TODO: Use proper enum for new animation index here
-			switch (new_state) {
+			switch (new_state)
+			{
 				case _weapon_state_idle:
 					new_animation_index = 0;
 					break;
