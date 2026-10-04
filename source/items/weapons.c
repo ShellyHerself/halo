@@ -510,7 +510,7 @@ boolean weapon_put_away(
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
 	boolean put_away = FALSE;
 
-	if ((immediate || weapon_busy(weapon_index)) && weapon_set_state(weapon_index, _weapon_state_put_away, immediate))
+	if ((immediate || !weapon_busy(weapon_index)) && weapon_set_state(weapon_index, _weapon_state_put_away, immediate))
 	{
 		weapon->weapon.control_flags = 0;
 		weapon_reset(weapon_index);
