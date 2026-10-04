@@ -251,22 +251,26 @@ static struct profile_section weapon_update_section = {"weapon_update", NONE, TR
 
 /* ---------- public code */
 
-void weapons_initialize(void)
+void weapons_initialize(
+	void)
 {
 	return;
 }
 
-void weapons_initialize_for_new_map(void)
+void weapons_initialize_for_new_map(
+	void)
 {
 	return;
 }
 
-void weapons_dispose_from_old_map(void)
+void weapons_dispose_from_old_map(
+	void)
 {
 	return;
 }
 
-void weapons_dispose(void)
+void weapons_dispose(
+	void)
 {
 	return;
 }
@@ -299,7 +303,8 @@ void weapon_place(
 	SET_FLAG(weapon->object.flags, _object_cannot_be_garbage_bit, TRUE);
 	SET_FLAG(weapon->item.flags, _item_does_not_accelerate_bit, TEST_FLAG(scenario_weapon->flags, 2));
 	
-	if (!TEST_FLAG(scenario_weapon->flags, _weapon_created_at_rest_bit)) {
+	if (!TEST_FLAG(scenario_weapon->flags, _weapon_created_at_rest_bit))
+	{
 		weapon->object.position.z += 0.05f; // This might be a named const?
 	}
 
@@ -322,7 +327,8 @@ void weapon_preprocess_node_orientations(
 	return;
 }
 
-char const *weapon_get_label(const weapon_index)
+char const *weapon_get_label(
+	long weapon_index)
 {
 	char const *label = "";
 	if (weapon_index != NONE)

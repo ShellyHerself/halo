@@ -26,12 +26,8 @@ enum
 
 /* ---------- prototypes/PROJECTILES.C */
 
-void projectile_accelerate(
-	long projectile_index,
-	union real_vector3d const *acceleration);
-real projectile_estimate_time_to_target(
-	struct projectile_definition const *projectile_definition,
-	real target_distance);
+void projectile_accelerate(long projectile_index, union real_vector3d const *acceleration);
+real projectile_estimate_time_to_target(struct projectile_definition const *projectile_definition, real target_distance);
 
 /* ---------- globals */
 
