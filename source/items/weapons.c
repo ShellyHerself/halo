@@ -688,7 +688,7 @@ static boolean weapon_state_interruptable(short old_state, short new_state)
 	return interruptable;
 }
 
-// TODO: finish
+// TODO: finish, there's still discrepancies
 static boolean weapon_set_state(
 	long weapon_index,
 	short new_state,
@@ -700,52 +700,71 @@ static boolean weapon_set_state(
 
 	if (immediate || weapon_state_interruptable(weapon->weapon.state, new_state))
 	{
+		long animation_graph_index = weapon_definition->object.animation_graph.index;
 		long owner_object_index;
-		long new_animation_index;
-		if (weapon_definition->object.animation_graph.index != NONE)
+		long new_animation_state_index;
+		if (animation_graph_index != NONE)
 		{
-			struct animation_graph* animation_graph = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
-			// TODO: Use proper enum for new animation index here
-			switch (new_state)
+			struct animation_graph* animation_graph = animation_graph_definition_get(animation_graph_index);
+			struct animation_graph_weapon_animations const *animations = TAG_BLOCK_GET_ELEMENT(&animation_graph->weapon_animations, 0, struct animation_graph_weapon_animations);
+			if (animations)
 			{
-				case _weapon_state_idle:
-					new_animation_index = 0;
-					break;
-				case _weapon_state_primary_recoil:
-			  		new_animation_index = 9;
-					break;
-				case _weapon_state_secondary_recoil:
-					new_animation_index = 10;
-					break;
-				case _weapon_state_primary_chamber:
-					new_animation_index = 5;
-					break;
-				case _weapon_state_secondary_chamber:
-					new_animation_index = 6;
-					break;
-				case _weapon_state_primary_reload:
-				case _weapon_state_secondary_reload:
-					new_animation_index = 3;
-					break;
-				case _weapon_state_primary_charged:
-				case _weapon_state_secondary_charged:
-					new_animation_index = 8;
-					break;
-				case _weapon_state_ready:
-					new_animation_index = 1;
-					break;
-				case _weapon_state_put_away:
-					new_animation_index = 2;
-					break;
+				short considered_animation_index = NONE;
+				switch (new_state)
+				{
+					case _weapon_state_idle:
+						new_animation_state_index = _weapon_animation_idle;
+						break;
+					case _weapon_state_primary_recoil:
+						new_animation_state_index = _weapon_animation_primary_recoil;
+						break;
+					case _weapon_state_secondary_recoil:
+						new_animation_state_index = _weapon_animation_secondary_recoil;
+						break;
+					case _weapon_state_primary_chamber:
+						new_animation_state_index = _weapon_animation_primary_chamber;
+						break;
+					case _weapon_state_secondary_chamber:
+						new_animation_state_index = _weapon_animation_secondary_chamber;
+						break;
+					case _weapon_state_primary_reload:
+					case _weapon_state_secondary_reload:
+						new_animation_state_index = _weapon_animation_primary_reload;
+						break;
+					case _weapon_state_primary_charged:
+					case _weapon_state_secondary_charged:
+						new_animation_state_index = _weapon_animation_secondary_charged;
+						break;
+					case _weapon_state_ready:
+						new_animation_state_index = _weapon_animation_ready;
+						break;
+					case _weapon_state_put_away:
+						new_animation_state_index = _weapon_animation_put_away;
+						break;
+					default:
+						break;
+				}
+
+				if (new_animation_state_index != NONE) {
+					if ( new_animation_state_index < 0 || new_animation_state_index >= animations->animations.count )
+					{
+						considered_animation_index = NONE;
+					}
+					else
+					{
+						considered_animation_index = ((short *)animations->animations.address) + new_animation_state_index;
+					}
+					if (considered_animation_index != NONE || !new_state)
+					{
+						weapon->object.animation.state.index = animation_choose_random_permutation_internal(
+							TRUE, weapon_definition->object.animation_graph.index, new_animation_state_index
+						);
+						weapon->weapon.state = new_state;
+						weapon->object.animation.state.frame_index = 0;
+					}
+				}
 			}
-
-			//
-			// TODO: Things need to happen here
-			//
-
-			weapon->object.animation.state.index = animation_choose_random_permutation_internal(
-				1, weapon_definition->object.animation_graph.index, new_animation_index
-			);
+			
 		}
 
 		owner_object_index = weapon_get_owner_object_index(weapon_index);
