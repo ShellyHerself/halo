@@ -251,28 +251,30 @@ static struct profile_section weapon_update_section = {"weapon_update", NONE, TR
 
 /* ---------- public code */
 
-void weapons_initialize()
+void weapons_initialize(void)
 {
 	return;
 }
 
-void weapons_initialize_for_new_map()
+void weapons_initialize_for_new_map(void)
 {
 	return;
 }
 
-void weapons_dispose_from_old_map()
+void weapons_dispose_from_old_map(void)
 {
 	return;
 }
 
-void weapons_dispose()
+void weapons_dispose(void)
 {
 	return;
 }
 
 
-void weapon_place(long weapon_index, const struct scenario_weapon_datum *scenario_weapon)
+void weapon_place(
+	long weapon_index,
+	const struct scenario_weapon_datum *scenario_weapon)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -304,7 +306,9 @@ void weapon_place(long weapon_index, const struct scenario_weapon_datum *scenari
 	return;
 }
 
-void weapon_preprocess_node_orientations(long weapon_index, struct real_orientation *node_orientations)
+void weapon_preprocess_node_orientations(
+	long weapon_index,
+	struct real_orientation *node_orientations)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition;
@@ -331,13 +335,18 @@ char const *weapon_get_label(const weapon_index)
 	return label;
 }
 
-void weapon_set_integrated_light_power(long weapon_index, const real light_power)
+void weapon_set_integrated_light_power(
+	long weapon_index,
+	real light_power)
 {
 	weapon_get(weapon_index)->weapon.integrated_light_power = light_power;
 	return;
 }
 
-real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real target_distance)
+real weapon_estimate_time_to_target(
+	long weapon_index,
+	short trigger_index,
+	real target_distance)
 {
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon_get(weapon_index)->definition_index);
 	real result = 0.0f;
@@ -395,7 +404,10 @@ boolean weapon_useful(long weapon_index)
 	return result;
 }
 
-real weapon_compute_movement_penalty(long weapon_index, const boolean forward, const boolean zoomed)
+real weapon_compute_movement_penalty(
+	long weapon_index,
+	boolean forward,
+	boolean zoomed)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
