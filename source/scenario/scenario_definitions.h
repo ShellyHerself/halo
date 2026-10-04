@@ -37,10 +37,10 @@ enum
 
 enum
 {
-  _weapon_created_at_rest_bit = 0,
-  _weapon_obsolete_bit,
-  _weapon_does_accelerate_bit,
-  NUMBER_OF_SCENARIO_WEAPON_FLAGS,
+	_weapon_created_at_rest_bit = 0,
+	_weapon_obsolete_bit,
+	_weapon_does_accelerate_bit,
+	NUMBER_OF_SCENARIO_WEAPON_FLAGS,
 };
 
 enum
