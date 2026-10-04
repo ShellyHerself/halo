@@ -164,12 +164,6 @@ struct animation_graph_weapon_animations
   struct tag_block animations;
 };
 
-struct animation_graph_weapon_animations
-{
-  long unused1[4];
-  struct tag_block animations;
-};
-
 struct animation_graph
 {
 	struct tag_block object_overlays;		// animation_graph_object_overlay
