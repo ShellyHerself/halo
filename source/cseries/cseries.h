@@ -101,8 +101,8 @@ enum
 
 /* ---------- macros */
 
-#define SECONDS_PER_TICK (1.f/TICKS_PER_SECOND) // [fake name]
-#define METERS_PER_UNIT 3.048f // [fake name] 1 Halo world Unit = 10ft = 3.048m
+#define SECONDS_PER_TICK (1.f/TICKS_PER_SECOND) /* fake name */
+#define METERS_PER_UNIT 3.048f /* fake name */
 
 #define STRINGIFY_DETAIL(x) #x
 #define STRINGIFY(x) STRINGIFY_DETAIL(x)
@@ -116,8 +116,8 @@ enum
 	#define MATCH_LINE(line) line
 #endif
 
-#define match_halt(file, line) do { display_assert(NULL, MATCH_FILE(file), MATCH_LINE(line), TRUE); halt_and_catch_fire(); } while (FALSE);
-#define match_vhalt(file, line, string) do { display_assert(string, MATCH_FILE(file), MATCH_LINE(line), TRUE); halt_and_catch_fire(); } while (FALSE);
+#define match_halt(file, line) { display_assert(NULL, MATCH_FILE(file), MATCH_LINE(line), TRUE); system_exit(-1); }
+#define match_vhalt(file, line, string) { display_assert(string, MATCH_FILE(file), MATCH_LINE(line), TRUE); system_exit(-1); }
 #define match_assert(file, line, expr) if (!(expr)) { display_assert(#expr, MATCH_FILE(file), MATCH_LINE(line), TRUE); system_exit(-1); }
 #define match_vassert(file, line, expr, string) if (!(expr)) { display_assert(string, MATCH_FILE(file), MATCH_LINE(line), TRUE); system_exit(-1); }
 #define match_warn(file, line, expr) if (!(expr)) { display_assert(#expr, MATCH_FILE(file), MATCH_LINE(line), FALSE); }
@@ -155,8 +155,6 @@ enum
 
 #define SIZEOF_BITS(value) (CHAR_BITS*sizeof(value))
 #define NUMBEROF(array) (sizeof(array) / sizeof(array[0]))
-
-#define VALID_INDEX(index, count) (index>=0 && index<count)
 
 #define DATUM_INDEX_NEW(absolute_index, salt) ((absolute_index) | ((salt)<<SHORT_BITS))
 #define DATUM_INDEX_TO_ABSOLUTE_INDEX(datum_index) ((datum_index)&UNSIGNED_SHORT_MAX)
@@ -254,52 +252,54 @@ void stack_walk_disregard_symbol_names(boolean disregard);
 #define memcpy csmemcpy
 
 #define match_malloc(file, line, size) debug_malloc(size, FALSE, MATCH_FILE(file), MATCH_LINE(line))
+#define match_calloc(file, line, count, size) debug_malloc((count)*(size), TRUE, MATCH_FILE(file), MATCH_LINE(line))
 #define match_free(file, line, ptr) debug_free(ptr, MATCH_FILE(file), MATCH_LINE(line))
 #define match_realloc(file, line, ptr, size) debug_realloc(ptr, size, MATCH_FILE(file), MATCH_LINE(line))
 
 #define malloc(size) match_malloc(__FILE__, __LINE__, size)
 #define free(ptr) match_free(__FILE__, __LINE__, ptr)
+#define calloc(count, size) match_calloc(__FILE__, __LINE__, count, size)
 #define realloc(ptr, size) match_realloc(__FILE__, __LINE__, ptr, size)
 
 /* ---------- globals */
 
 extern char temporary[256];
 
-extern const union real_argb_color *const global_real_argb_white;
-extern const union real_argb_color *const global_real_argb_grey;
-extern const union real_argb_color *const global_real_argb_black;
-extern const union real_argb_color *const global_real_argb_red;
-extern const union real_argb_color *const global_real_argb_green;
-extern const union real_argb_color *const global_real_argb_blue;
-extern const union real_argb_color *const global_real_argb_cyan;
-extern const union real_argb_color *const global_real_argb_yellow;
-extern const union real_argb_color *const global_real_argb_magenta;
-extern const union real_argb_color *const global_real_argb_pink;
-extern const union real_argb_color *const global_real_argb_lightblue;
-extern const union real_argb_color *const global_real_argb_orange;
-extern const union real_argb_color *const global_real_argb_purple;
-extern const union real_argb_color *const global_real_argb_aqua;
-extern const union real_argb_color *const global_real_argb_darkgreen;
-extern const union real_argb_color *const global_real_argb_salmon;
-extern const union real_argb_color *const global_real_argb_violet;
+extern const union real_argb_color *global_real_argb_white;
+extern const union real_argb_color *global_real_argb_grey;
+extern const union real_argb_color *global_real_argb_black;
+extern const union real_argb_color *global_real_argb_red;
+extern const union real_argb_color *global_real_argb_green;
+extern const union real_argb_color *global_real_argb_blue;
+extern const union real_argb_color *global_real_argb_cyan;
+extern const union real_argb_color *global_real_argb_yellow;
+extern const union real_argb_color *global_real_argb_magenta;
+extern const union real_argb_color *global_real_argb_pink;
+extern const union real_argb_color *global_real_argb_lightblue;
+extern const union real_argb_color *global_real_argb_orange;
+extern const union real_argb_color *global_real_argb_purple;
+extern const union real_argb_color *global_real_argb_aqua;
+extern const union real_argb_color *global_real_argb_darkgreen;
+extern const union real_argb_color *global_real_argb_salmon;
+extern const union real_argb_color *global_real_argb_violet;
 
-extern const union real_rgb_color *const global_real_rgb_white;
-extern const union real_rgb_color *const global_real_rgb_grey;
-extern const union real_rgb_color *const global_real_rgb_black;
-extern const union real_rgb_color *const global_real_rgb_red;
-extern const union real_rgb_color *const global_real_rgb_green;
-extern const union real_rgb_color *const global_real_rgb_blue;
-extern const union real_rgb_color *const global_real_rgb_cyan;
-extern const union real_rgb_color *const global_real_rgb_yellow;
-extern const union real_rgb_color *const global_real_rgb_magenta;
-extern const union real_rgb_color *const global_real_rgb_pink;
-extern const union real_rgb_color *const global_real_rgb_lightblue;
-extern const union real_rgb_color *const global_real_rgb_orange;
-extern const union real_rgb_color *const global_real_rgb_purple;
-extern const union real_rgb_color *const global_real_rgb_aqua;
-extern const union real_rgb_color *const global_real_rgb_darkgreen;
-extern const union real_rgb_color *const global_real_rgb_salmon;
-extern const union real_rgb_color *const global_real_rgb_violet;
+extern const union real_rgb_color *global_real_rgb_white;
+extern const union real_rgb_color *global_real_rgb_grey;
+extern const union real_rgb_color *global_real_rgb_black;
+extern const union real_rgb_color *global_real_rgb_red;
+extern const union real_rgb_color *global_real_rgb_green;
+extern const union real_rgb_color *global_real_rgb_blue;
+extern const union real_rgb_color *global_real_rgb_cyan;
+extern const union real_rgb_color *global_real_rgb_yellow;
+extern const union real_rgb_color *global_real_rgb_magenta;
+extern const union real_rgb_color *global_real_rgb_pink;
+extern const union real_rgb_color *global_real_rgb_lightblue;
+extern const union real_rgb_color *global_real_rgb_orange;
+extern const union real_rgb_color *global_real_rgb_purple;
+extern const union real_rgb_color *global_real_rgb_aqua;
+extern const union real_rgb_color *global_real_rgb_darkgreen;
+extern const union real_rgb_color *global_real_rgb_salmon;
+extern const union real_rgb_color *global_real_rgb_violet;
 
 /* ---------- public code */
 
