@@ -46,7 +46,7 @@ struct _projectile_definition
 	real final_velocity;
 	real guided_angular_velocity;
 	short detonation_noise;
-	unsigned __int16 unused1;
+	word unused1;
 	struct tag_reference detonation_timer_started;
 	struct tag_reference flyby_sound;
 	struct tag_reference detonation_damage;
