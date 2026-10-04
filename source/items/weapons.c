@@ -272,7 +272,7 @@ void weapons_dispose()
 }
 
 
-void weapon_place(const long weapon_index, const struct scenario_weapon_datum *scenario_weapon)
+void weapon_place(long weapon_index, const struct scenario_weapon_datum *scenario_weapon)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -304,7 +304,7 @@ void weapon_place(const long weapon_index, const struct scenario_weapon_datum *s
 	return;
 }
 
-void weapon_preprocess_node_orientations(const long weapon_index, struct real_orientation *node_orientations)
+void weapon_preprocess_node_orientations(long weapon_index, struct real_orientation *node_orientations)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition;
@@ -331,7 +331,7 @@ char const *weapon_get_label(const weapon_index)
 	return label;
 }
 
-void weapon_set_integrated_light_power(const long weapon_index, const real light_power)
+void weapon_set_integrated_light_power(long weapon_index, const real light_power)
 {
 	weapon_get(weapon_index)->weapon.integrated_light_power = light_power;
 	return;
@@ -350,7 +350,7 @@ real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real
 }
 
 /* Used to determine if a weapon can ever be fired again. Used to determine if a weapon should be deleted in multiplayer */
-boolean weapon_can_be_fired(const long weapon_index)
+boolean weapon_can_be_fired(long weapon_index)
 {
     struct weapon_datum *weapon = weapon_get(weapon_index);
   	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -380,7 +380,7 @@ boolean weapon_can_be_fired(const long weapon_index)
     return result;
 }
 
-boolean weapon_useful(const long weapon_index)
+boolean weapon_useful(long weapon_index)
 {
 	boolean result;
 
@@ -395,7 +395,7 @@ boolean weapon_useful(const long weapon_index)
 	return result;
 }
 
-real weapon_compute_movement_penalty(const long weapon_index, const boolean forward, const boolean zoomed)
+real weapon_compute_movement_penalty(long weapon_index, const boolean forward, const boolean zoomed)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
@@ -425,26 +425,26 @@ real weapon_compute_movement_penalty(const long weapon_index, const boolean forw
 	return penalty;
 }
 
-void weapon_melee_attack(const long weapon_index)
+void weapon_melee_attack(long weapon_index)
 {
 	return;
 }
 
-boolean weapon_must_be_readied(const long weapon_index)
+boolean weapon_must_be_readied(long weapon_index)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_is_flag(const long weapon_index)
+boolean weapon_is_flag(long weapon_index)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
 	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_prevents_grenade_throwing(const long weapon_index)
+boolean weapon_prevents_grenade_throwing(long weapon_index)
 {
 	boolean does_it = TRUE;
 
