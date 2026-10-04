@@ -295,9 +295,9 @@ void weapon_place(
 				: scenario_weapon->rounds_loaded;
 	}
 
-	SET_FLAG(weapon->object.flags, 5, TEST_FLAG(scenario_weapon->flags, 0));
-	SET_FLAG(weapon->object.flags, 17, TRUE);
-	SET_FLAG(weapon->item.flags, 5, TEST_FLAG(scenario_weapon->flags, 2));
+	SET_FLAG(weapon->object.flags, _object_at_rest_bit, TEST_FLAG(scenario_weapon->flags, 0));
+	SET_FLAG(weapon->object.flags, _object_cannot_be_garbage_bit, TRUE);
+	SET_FLAG(weapon->item.flags, _item_does_not_accelerate_bit, TEST_FLAG(scenario_weapon->flags, 2));
 	
 	if (!TEST_FLAG(scenario_weapon->flags, _weapon_created_at_rest_bit)) {
 		weapon->object.position.z += 0.05f; // This might be a named const?
@@ -311,11 +311,8 @@ void weapon_preprocess_node_orientations(
 	struct real_orientation *node_orientations)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
-	struct weapon_definition *weapon_definition;
-	struct animation_graph *animation;
-
-	weapon_definition = weapon_definition_get(weapon->definition_index);
-	animation = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
+	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+	struct animation_graph *animation = animation_graph_definition_get(weapon_definition->object.animation_graph.index);
 
 	if (animation->weapon_animations.count)
 	{
@@ -368,23 +365,37 @@ boolean weapon_can_be_fired(long weapon_index)
 
     // Weapons that use battery/age can't be refilled so they cannot be fired again
     if (weapon->weapon.age >= 1.0f)
+	{
         result = FALSE;
+	}
 
     // If not in multiplayer a player might pick up new ammo for a weapon. So it can technically be fired
     else if (!game_engine_running())
+	{
         result = TRUE;
+	}
 
     // Weapons that can't have ammo can still be "fired"
     else if (weapon_definition->weapon.magazines.count <= 0)
+	{
         result = TRUE;
+    }
     else if (TAG_BLOCK_GET_ELEMENT(&weapon_definition->weapon.magazines, 0, struct weapon_magazine_definition)->rounds_loaded_maximum <= 0)
+	{
         result = TRUE;
+	}
     else if (weapon->weapon.magazines[0].rounds_loaded > 0)
+	{
         result = TRUE;
+	}
     else if (weapon->weapon.magazines[0].rounds_total > 0)
-        result = TRUE;
+    {
+		result = TRUE;
+	}
 	else
+	{
 		result = FALSE;
+	}
 
     return result;
 }
@@ -394,7 +405,7 @@ boolean weapon_useful(long weapon_index)
 	boolean result;
 
 	if (weapon_get(weapon_index)->weapon.age >= 1.0f) 
-{
+    {
 		result = FALSE;
 	}
 	else {
@@ -467,7 +478,9 @@ boolean weapon_prevents_grenade_throwing(long weapon_index)
 
 		does_it = TEST_FLAG(weapon_definition->weapon.flags, _weapon_multiplayer_flag);
 		if (weapon->weapon.state >= _weapon_state_primary_reload || weapon->weapon.state <= _weapon_state_put_away)
+		{
 			does_it = TRUE;
+		}
 	}
 	
 	return does_it;
