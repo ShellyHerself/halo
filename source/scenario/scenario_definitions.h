@@ -134,9 +134,9 @@ struct scenario_weapon_datum
   struct scenario_object_permutation permutation;
   short rounds_total;
   short rounds_loaded;
-  unsigned short flags;
-  unsigned short pad;
-  unsigned int unused[3];
+  word flags;
+  word pad;
+  unsigned long unused[3];
 };
 
 
