@@ -406,7 +406,8 @@ boolean weapon_can_be_fired(long weapon_index)
 	return result;
 }
 
-boolean weapon_useful(long weapon_index)
+boolean weapon_useful(
+	long weapon_index)
 {
 	boolean useful;
 
