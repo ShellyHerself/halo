@@ -87,6 +87,14 @@ struct flags_definition
 	char **strings;
 };
 
+struct tag_data_definition
+{
+	char *name;
+	unsigned long flags;
+	long maximum_size;
+	void (*byte_swap_data)(void *, void *, long);
+};
+
 struct tag_block_definition
 {
 	char *name;
@@ -141,6 +149,7 @@ struct tag_iterator
 
 /* ---------- prototypes/TAG_GROUPS.C */
 
+long verify_tag_reference(struct tag_reference const *reference);
 void *tag_data_get_pointer(struct tag_data const *data, long offset, long size);
 void *tag_block_get_element_with_size(struct tag_block const *block, long index, long element_size);
 

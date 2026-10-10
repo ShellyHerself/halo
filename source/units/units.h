@@ -270,6 +270,21 @@ enum
 	NUMBER_OF_UNIT_WEAPON_CLASS_ANIMATIONS,
 };
 
+enum
+{
+	_unit_weapon_type_animation_primary_reload = 0,
+	_unit_weapon_type_animation_secondary_reload,
+	_unit_weapon_type_animation_primary_chamber,
+	_unit_weapon_type_animation_secondary_chamber,
+	_unit_weapon_type_animation_primary_recoil,
+	_unit_weapon_type_animation_secondary_recoil,
+	_unit_weapon_type_animation_primary_charged,
+	_unit_weapon_type_animation_secondary_charged,
+	_unit_weapon_type_animation_melee,
+	_unit_weapon_type_animation_overheat,
+	NUMBER_OF_UNIT_WEAPON_TYPE_ANIMATIONS,
+};
+
 
 enum
 {
@@ -343,6 +358,22 @@ enum
 #define unit_try_and_get(index)	((struct unit_datum*)object_try_and_get_and_verify_type(index, _object_mask_unit))
 
 /* ---------- structures */
+
+struct unit_control_data
+{
+	char animation_state;
+	char aiming_speed;
+	word control_flags;
+	short weapon_index;
+	short grenade_index;
+	short zoom_level;
+	word pad;
+	real_vector3d throttle;
+	real primary_trigger;
+	real_vector3d facing_vector;
+	real_vector3d aiming_vector;
+	real_vector3d looking_vector;
+};
 
 struct unit_animation
 {
@@ -553,6 +584,9 @@ boolean unit_can_use_weapon(long unit_index, long weapon_index);
 
 void unit_set_possessed(long unit_index, boolean possessed);
 void unit_set_actively_controlled(long unit_index, boolean actively_controlled);
+boolean unit_controllable(long unit_index);
+void unit_set_controllable(long unit_index, boolean controllable);
+void unit_control(long unit_index, struct unit_control_data *control);
 boolean unit_is_busy(long object_index);
 void unit_scripting_set_emotion_animation(long unit_index, char const *animation_name);
 

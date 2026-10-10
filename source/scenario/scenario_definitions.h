@@ -15,6 +15,13 @@ header included in hcex build.
 
 enum
 {
+	_scenario_cortana_hack_bit = 0,
+	_scenario_demo_ui_bit,
+	NUMBER_OF_SCENARIO_FLAGS,
+};
+
+enum
+{
 	SCENARIO_GROUP_TAG = 'scnr'
 };
 
@@ -221,6 +228,25 @@ struct scenario_cutscene_camera_point
 	real_euler_angles3d orientation;
 	real field_of_view;
 	long unused[9];
+};
+
+struct scenario_cutscene_title
+{
+	long flags;
+	char name[TAG_STRING_LENGTH+1];
+	long pad0;
+	rectangle2d bounds;
+	short text_index;
+	short style;
+	short justification;
+	short pad1;
+	unsigned long text_flags;
+	pixel32 foreground_color;
+	pixel32 shadow_color;
+	real fade_in_time;
+	real up_time;
+	real fade_out_time;
+	long unused[4];
 };
 
 struct scenario
