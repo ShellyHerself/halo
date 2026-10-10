@@ -408,17 +408,17 @@ boolean weapon_can_be_fired(long weapon_index)
 
 boolean weapon_useful(long weapon_index)
 {
-	boolean result;
+	boolean useful;
 
 	if (weapon_get(weapon_index)->weapon.age >= 1.0f) 
 	{
-		result = FALSE;
+		useful = FALSE;
 	}
 	else {
-		result = TRUE;
+		useful = TRUE;
 	}
 	
-	return result;
+	return useful;
 }
 
 real weapon_compute_movement_penalty(
