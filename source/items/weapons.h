@@ -230,14 +230,14 @@ void weapons_initialize_for_new_map();
 void weapons_dispose_from_old_map();
 void weapons_dispose();
 
-void weapon_place(long weapon_index, const struct scenario_weapon_datum *scenario_weapon);
+void weapon_place(long weapon_index, struct scenario_weapon_datum const *scenario_weapon);
 void weapon_preprocess_node_orientations(long weapon_index, struct real_orientation *node_orientations);
-char const *weapon_get_label(const weapon_index);
-void weapon_set_integrated_light_power(long weapon_index, const real light_power);
+char const *weapon_get_label(long weapon_index);
+void weapon_set_integrated_light_power(long weapon_index, real light_power);
 real weapon_estimate_time_to_target(long weapon_index, short trigger_index, real target_distance);
 boolean weapon_can_be_fired(long weapon_index);
 boolean weapon_useful(long weapon_index);
-real weapon_compute_movement_penalty(long weapon_index, const boolean forward, const boolean zoomed);
+real weapon_compute_movement_penalty(long weapon_index, boolean forward, boolean zoomed);
 boolean weapon_must_be_readied(long weapon_index);
 boolean weapon_is_flag(long weapon_index);
 boolean weapon_prevents_grenade_throwing(long weapon_index);

@@ -456,33 +456,37 @@ real weapon_compute_movement_penalty(
 	return penalty;
 }
 
-void weapon_melee_attack(long weapon_index)
+void weapon_melee_attack(
+	long weapon_index)
 {
 	return;
 }
 
-boolean weapon_must_be_readied(long weapon_index)
+boolean weapon_must_be_readied(
+	long weapon_index)
 {
-	struct weapon_datum *weapon = weapon_get(weapon_index);
-	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
+	struct weapon_datum const *weapon = weapon_get(weapon_index);
+	struct weapon_definition const *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_is_flag(long weapon_index)
+boolean weapon_is_flag(
+	long weapon_index)
 {
-	struct weapon_datum *weapon = weapon_get(weapon_index);
-	struct weapon_definition *weapon_defintion = weapon_definition_get(weapon->definition_index);
+	struct weapon_datum const *weapon = weapon_get(weapon_index);
+	struct weapon_definition const *weapon_defintion = weapon_definition_get(weapon->definition_index);
 	return TEST_FLAG(weapon_defintion->weapon.flags, _weapon_must_be_readied_bit);
 }
 
-boolean weapon_prevents_grenade_throwing(long weapon_index)
+boolean weapon_prevents_grenade_throwing(
+	long weapon_index)
 {
 	boolean does_it = TRUE;
 
 	if (weapon_index != NONE)
 	{
-		struct weapon_datum *weapon = weapon_get(weapon_index);
-		struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
+		struct weapon_datum const *weapon = weapon_get(weapon_index);
+		struct weapon_definition const *weapon_definition = weapon_definition_get(weapon->definition_index);
 
 		does_it = TEST_FLAG(weapon_definition->weapon.flags, _weapon_multiplayer_flag);
 		if (weapon->weapon.state >= _weapon_state_primary_reload || weapon->weapon.state <= _weapon_state_put_away)
