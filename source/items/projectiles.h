@@ -16,12 +16,6 @@ header included in hcex build.
 
 enum
 {
-	PROJECTILE_DEFINITION_TAG = 'proj', // 0x70726F6A
-	PROJECTILE_DEFINITION_VERSION = 5, // 0x0005
-};
-
-enum
-{
 	_projectile_has_nonzero_angular_velocity_bit = 0,
 	_projectile_tracer_bit,
 	_projectile_collided_once_bit,
