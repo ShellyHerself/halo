@@ -225,10 +225,10 @@ struct weapon_datum
 
 /* ---------- prototypes/WEAPONS.C */
 
-void weapons_initialize();
-void weapons_initialize_for_new_map();
-void weapons_dispose_from_old_map();
-void weapons_dispose();
+void weapons_initialize(void);
+void weapons_initialize_for_new_map(void);
+void weapons_dispose_from_old_map(void);
+void weapons_dispose(void);
 
 void weapon_place(long weapon_index, struct scenario_weapon_datum const *scenario_weapon);
 void weapon_preprocess_node_orientations(long weapon_index, struct real_orientation *node_orientations);
