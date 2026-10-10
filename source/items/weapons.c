@@ -362,7 +362,8 @@ real weapon_estimate_time_to_target(
 }
 
 /* Used to determine if a weapon can ever be fired again. Used to determine if a weapon should be deleted in multiplayer */
-boolean weapon_can_be_fired(long weapon_index)
+boolean weapon_can_be_fired(
+	long weapon_index)
 {
 	struct weapon_datum *weapon = weapon_get(weapon_index);
   	struct weapon_definition *weapon_definition = weapon_definition_get(weapon->definition_index);
