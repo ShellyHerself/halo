@@ -166,8 +166,8 @@ struct rasterizer_frame_begin_parameters
 struct dynamic_unlit_vertex
 {
 	real_point3d position;
-	pixel32 color;
 	real_point2d texcoord;
+	pixel32 color;
 };
 
 struct dynamic_screen_vertex
@@ -175,6 +175,18 @@ struct dynamic_screen_vertex
 	real_point2d position;
 	real_point2d texcoord;
 	pixel32 color;
+};
+
+struct rasterizer_meter_parameters
+{
+	unsigned long gradient_min_color;
+	unsigned long gradient_max_color;
+	unsigned long background_color;
+	unsigned long flash_color;
+	boolean flash_color_is_negative;
+	boolean tint_mode_2;
+	unsigned long tint_color;
+	real gradient;
 };
 
 struct rasterizer_dynamic_screen_geometry_parameters
@@ -407,6 +419,11 @@ struct rasterizer_lens_flare_submit_parameters
 	byte compressed_window_index;
 	byte compressed_light_scale;
 	long internal__occlusion_pixels;
+};
+
+struct rasterizer_triangle
+{
+	word vertex_indices[3];
 };
 
 /* ---------- prototypes/RASTERIZER.C */

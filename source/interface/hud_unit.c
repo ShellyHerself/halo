@@ -62,9 +62,9 @@ struct unit_hud_state
 	long last_health_flash_time;
 	long last_motion_sensor_flash_time;
 	long last_unit_index;
-	unsigned short auxilary_active_type_flags;
+	word auxilary_active_type_flags;
 	short auxilary_flash_time[NUMBER_OF_UNIT_AUXILARY_METERS];
-	unsigned short sound_flags;
+	word sound_flags;
 	long last_sound_handles[MAXIMUM_NUMBER_OF_HUD_SOUNDS];
 };
 
@@ -203,7 +203,7 @@ void hud_play_unit_sounds(
 
 		if (hud_index != NONE)
 		{
-			struct unit_hud_interface_definition *hud_definition = tag_get(UNIT_HUD_INTERFACE_TAG, hud_index);
+			struct unit_hud_interface_definition *hud_definition = unit_hud_interface_definition_get(hud_index);
 			long flags = 0;
 
 			if (TEST_FLAG(unit->object.flags, _object_on_media_bit) || !(unit->object.body_vitality > 0.f))
@@ -280,7 +280,7 @@ void hud_render_damage_indicators(
 					case 1:
 						position.x = render.camera.window_bounds.x0 + definition->left_offset;
 						position.y = (render.camera.viewport_bounds.y0 + render.camera.viewport_bounds.y1) / 2;
-						theta = _half_pi;
+						theta = _pi2;
 						break;
 					case 2:
 						position.y = render.camera.window_bounds.y1 - definition->bottom_offset;
@@ -290,7 +290,7 @@ void hud_render_damage_indicators(
 					case 3:
 						position.x = render.camera.window_bounds.x1 - definition->right_offset;
 						position.y = (render.camera.viewport_bounds.y0 + render.camera.viewport_bounds.y1) / 2;
-						theta = 3.f * _half_pi;
+						theta = 3.f * _pi2;
 						break;
 					default:
 						match_unreachable("c:\\halo\\SOURCE\\interface\\hud_unit.c", 1024);
@@ -430,7 +430,7 @@ void hud_render_unit_interface(
 			hud_unit = unit_try_and_get(unit_indices[unit_count]);
 			if (hud_unit && unit_hud_indices[unit_count] != NONE)
 			{
-				struct unit_hud_interface_definition *hud_definition = tag_get(UNIT_HUD_INTERFACE_TAG, unit_hud_indices[unit_count]);
+				struct unit_hud_interface_definition *hud_definition = unit_hud_interface_definition_get(unit_hud_indices[unit_count]);
 
 				if (hud_definition->background.interface_bitmap.index != NONE)
 				{
@@ -568,7 +568,7 @@ void hud_render_unit_interface(
 				}
 				{
 					struct auxilary_panel_definition *panel = &hud_definition->auxilary_panel;
-					unsigned short overlay_flags = 0;
+					word overlay_flags = 0;
 					short index;
 					short draw_flags = 0;
 
@@ -634,15 +634,14 @@ void hud_render_unit_interface(
 							hud_state->auxilary_flash_time[meter->type] = NONE;
 					}
 				}
-				hud_state->auxilary_active_type_flags = (unsigned short)auxilary_flags;
+				hud_state->auxilary_active_type_flags = (word)auxilary_flags;
 			}
 		}
 	}
 	{
 		short corrupt_index = check_stack_buffer(stack_buffer);
 
-		match_vassert("c:\\halo\\SOURCE\\interface\\hud_unit.c", 969, return_eip == get_return_eip(), "corrupt return address!");
-		match_vassert("c:\\halo\\SOURCE\\interface\\hud_unit.c", 969, corrupt_index == NONE, csprintf(temporary, "corrupt stack at %d!", corrupt_index));
+		match_hud_verify_stack("c:\\halo\\SOURCE\\interface\\hud_unit.c", 969);
 	}
 
 	return;

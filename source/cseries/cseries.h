@@ -333,43 +333,6 @@ extern const union real_rgb_color *global_real_rgb_violet;
 
 /* ---------- public code */
 
-// HCEX indicates these live here despite the lack of real type
-__inline long fast_ftol(
-	float d)
-{
-	long result;
-
-	__asm
-	{
-		fld d
-		fistp result
-	}
-
-	return result;
-}
-
-__inline long fast_ftol_C(
-	float x)
-{
-	long result = fast_ftol(x);
-
-	// This is to simulate a C-cast where the result is truncated 
-	// Default float rounding is to nearest whole number (even numbers preferred when .5)
-	if (x >= 0.f)
-	{
-		if ((float)result > x)
-		{
-			result--;
-		}
-	}
-	else if ((float)result < x)
-	{
-		result++;
-	}
-
-	return result;
-}
-
 __inline unsigned int address_from_pointer(
 	void const *pointer)
 {

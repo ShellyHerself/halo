@@ -105,6 +105,37 @@ struct scenario_equipment_datum
 	struct scenario_object_datum object;
 };
 
+struct scenario_sound_scenery_datum /* fake name */
+{
+	struct scenario_object_datum object;
+};
+
+struct scenario_unit_datum
+{
+	real body_vitality;
+	unsigned long flags;
+	unsigned long unused[2];
+};
+
+struct scenario_biped_datum
+{
+	struct scenario_object_datum object;
+	struct scenario_object_permutation permutation;
+	struct scenario_unit_datum unit;
+	long unused[8];
+};
+
+struct scenario_vehicle_datum
+{
+	struct scenario_object_datum object;
+	struct scenario_object_permutation permutation;
+	struct scenario_unit_datum unit;
+	byte multiplayer_team_index;
+	byte unused_byte;
+	word multiplayer_spawn_flags;
+	long unused[7];
+};
+
 struct scenario_device_group
 {
 	char name[TAG_STRING_LENGTH+1];
@@ -159,7 +190,6 @@ struct scenario_weapon_datum
 	word pad;
 	unsigned long unused[3];
 };
-
 
 struct scenario_object_name
 {
@@ -305,7 +335,7 @@ struct scenario
 	struct tag_block ai_animation_references;
 	struct tag_block ai_script_references;
 	struct tag_block ai_recording_references;
-	struct tag_block ai_conversations;
+	struct tag_block ai_conversations;					// ai_conversation
 	struct tag_data hs_syntax_data;
 	struct tag_data hs_string_constants;
 	struct tag_block hs_scripts;

@@ -14,7 +14,8 @@ file has inline function assertions.
 
 #define _real_epsilon 0.0001f
 #define _pi 3.14159265359f
-#define _half_pi 1.57079632679f // [fake name?]
+#define _pi2 1.57079632679f	/* fake name */
+#define _sqrt2 1.41421356f	/* fake name */
 
 #define REAL_MIN -3.4028235e38f
 #define REAL_MAX 3.4028235e38f
@@ -22,115 +23,12 @@ file has inline function assertions.
 
 /* ---------- macros */
 
+#define realcmp_epsilon(a, b, epsilon) (fabs((a)-(b))<(epsilon)) /* fake name */
+
+#define realcmp(a, b) (fabs((a)-(b))<_real_epsilon)
+
 #define DEGREES_TO_RADIANS(angle) ((real)(((real)angle) * M_PI / 180.f))
 #define RADIANS_TO_DEGREES(angle) ((real)(((real)angle) * 180.f / M_PI))
-
-#define assert_valid_real(v)				\
-vassert(									\
-	valid_real(v),							\
-	csprintf(								\
-		temporary,							\
-		"%s: assert_valid_real(0x%08X %f)",	\
-		#v,									\
-		*((long*)&v), v						\
-	)										\
-)
-
-#define assert_valid_real_point3d(point)\
-vassert(												\
-	valid_real_point3d(point),							\
-	csprintf(											\
-		temporary,										\
-		"%s: assert_valid_real_point3d(%f, %f, %f)",	\
-		#point, (*point).x, (*point).y, (*point).z		\
-	)													\
-)
-
-#define assert_valid_real_vector3d(vector)				\
-vassert(												\
-	valid_real_vector3d(vector),						\
-	csprintf(											\
-		temporary,										\
-		"%s: assert_valid_real_vector2d(%f, %f, %f)",	\
-		#vector, (*vector).i, (*vector).j, (*vector).k	\
-	)													\
-)
-
-#define assert_valid_real_plane3d(plane)								\
-vassert(																\
-	valid_real_plane3d(plane),											\
-	csprintf(															\
-		temporary,														\
-		"%s: assert_valid_real_plane3d(%f, %f, %f / %f)",				\
-		#plane, (*plane).n.i, (*plane).n.j, (*plane).n.k, (*plane).d	\
-	)																	\
-)
-
-#define assert_valid_real_normal3d(vector)				\
-vassert(												\
-	valid_real_normal3d(vector),						\
-	csprintf(											\
-		temporary,										\
-		"%s: assert_valid_real_normal3d(%f, %f, %f)",	\
-		#vector, (*vector).i, (*vector).j, (*vector).k	\
-	)													\
-)
-
-#define assert_valid_real_vector3d_axes2(forward, up)						\
-vassert(																	\
-	valid_real_vector3d_axes2(forward, up),									\
-	csprintf(																\
-		temporary,															\
-		"%s, %s: assert_valid_real_vector3d_axes2(%f, %f, %f / %f, %f, %f)",\
-		#forward, #up,														\
-		(*forward).i, (*forward).j, (*forward).k, (*up).i, (*up).j, (*up).k	\
-	)																		\
-)
-
-#define assert_valid_real_matrix4x3_internal(matrix, string)				\
-vassert(valid_real((*matrix).scale), csprintf(temporary, "%s had a bad scale %f", string, (*matrix).scale));	\
-vassert(valid_real_normal3d(&(*matrix).forward), csprintf(temporary, "%s had a bad forward (%f,%f,%f)", string, (*matrix).forward.i, (*matrix).forward.j, (*matrix).forward.k));		\
-vassert(valid_real_normal3d(&(*matrix).left), csprintf(temporary, "%s had a bad left (%f,%f,%f)", string, (*matrix).left.i, (*matrix).left.j, (*matrix).left.k));						\
-vassert(valid_real_normal3d(&(*matrix).up), csprintf(temporary, "%s had a bad up (%f,%f,%f)", string, (*matrix).up.i, (*matrix).up.j, (*matrix).up.k));								\
-vassert(valid_real_point3d(&(*matrix).position), csprintf(temporary, "%s had a bad position (%f,%f,%f)", string, (*matrix).position.x, (*matrix).position.y, (*matrix).position.z));	\
-match_vassert(																\
-	valid_realcmp(dot_product3d(&(*matrix).forward, &(*matrix).left), 0.f),	\
-	csprintf(																\
-		temporary,															\
-		"%s had a forward (%f,%f,%f) not perpendicular to left (%f,%f,%f)",	\
-		string,																\
-		(*matrix).forward.i, (*matrix).forward.j, (*matrix).forward.k,		\
-		(*matrix).left.i, (*matrix).left.j, (*matrix).left.k));				\
-vassert(																	\
-	valid_realcmp(dot_product3d(&(*matrix).up, &(*matrix).left), 0.f),		\
-	csprintf(																\
-		temporary,															\
-		"%s had a up (%f,%f,%f) not perpendicular to left (%f,%f,%f)",		\
-		string,																\
-		(*matrix).up.i, (*matrix).up.j, (*matrix).up.k,						\
-		(*matrix).left.i, (*matrix).left.j, (*matrix).left.k));				\
-vassert(																	\
-	valid_realcmp(dot_product3d(&(*matrix).forward, &(*matrix).up), 0.f),	\
-	csprintf(																\
-		temporary,															\
-		"%s had a forward (%f,%f,%f) not perpendicular to up (%f,%f,%f)",	\
-		string,																\
-		(*matrix).forward.i, (*matrix).forward.j, (*matrix).forward.k,		\
-		(*matrix).up.i, (*matrix).up.j, (*matrix).up.k));					\
-vassert(valid_real_matrix4x3(matrix), csprintf(temporary, "%s: assert_valid_real_matrix4x3", string));	\
-
-#define assert_valid_real_matrix4x3(file, line, matrix)								\
-if (!valid_real_matrix4x3(matrix))													\
-{																					\
-	assert_valid_real_matrix4x3_internal(file, line, matrix, STRINGIFY(matrix));	\
-}																					\
-
-#define assert_valid_real_matrix4x3_custom_string(matrix, custom_string)	\
-if (!valid_real_matrix4x3(matrix))											\
-{																			\
-	char* string = custom_string;											\
-	assert_valid_real_matrix4x3_internal(file, line, matrix, string);		\
-}																			\
 
 #define match_assert_valid_real(file, line, v)	\
 match_vassert(									\
@@ -193,6 +91,18 @@ match_vassert(													\
 	)															\
 )
 
+#define match_assert_valid_real_rgb_color(file, line, color)	\
+match_vassert(													\
+	file,														\
+	line,														\
+	valid_real_rgb_color(color),								\
+	csprintf(													\
+		temporary,												\
+		"%s: assert_valid_real_rgb_color(%f, %f, %f)",			\
+		#color, (*color).red, (*color).green, (*color).blue		\
+	)															\
+)
+
 #define match_assert_valid_real_vector3d_axes2(file, line, forward, up)		\
 match_vassert(																\
 	file,																\
@@ -204,6 +114,19 @@ match_vassert(																\
 		#forward, #up,														\
 		(*forward).i, (*forward).j, (*forward).k, (*up).i, (*up).j, (*up).k	\
 	)																		\
+)
+
+#define match_assert_valid_real_sine_cosine(file, line, sine, cosine)	\
+match_vassert(														\
+	file,															\
+	line,															\
+	valid_real_sine_cosine(sine, cosine),							\
+	csprintf(														\
+		temporary,													\
+		"%s, %s: assert_valid_real_sine_cosine(%f, %f)",			\
+		#sine, #cosine,												\
+		sine, cosine												\
+	)																\
 )
 
 #define match_assert_valid_real_matrix4x3_internal(file, line, matrix, string)	\
@@ -251,6 +174,17 @@ if (!valid_real_matrix4x3(matrix))															\
 	char const* string = (custom_string);													\
 	match_assert_valid_real_matrix4x3_internal(file, line, matrix, string);					\
 }
+
+#define assert_valid_real(v) match_assert_valid_real(__FILE__, __LINE__, v)
+#define assert_valid_real_point3d(point) match_assert_valid_real_point3d(__FILE__, __LINE__, point)
+#define assert_valid_real_vector3d(vector) match_assert_valid_real_vector3d(__FILE__, __LINE__, vector)
+#define assert_valid_real_plane3d(plane) match_assert_valid_real_plane3d(__FILE__, __LINE__, plane)
+#define assert_valid_real_normal3d(vector) match_assert_valid_real_normal3d(__FILE__, __LINE__, vector)
+#define assert_valid_real_rgb_color(color) match_assert_valid_real_rgb_color(__FILE__, __LINE__, color)
+#define assert_valid_real_vector3d_axes2(forward, up) match_assert_valid_real_vector3d_axes2(__FILE__, __LINE__, forward, up)
+#define assert_valid_real_sine_cosine(sine, cosine) match_assert_valid_real_sine_cosine(__FILE__, __LINE__, sine, cosine)
+#define assert_valid_real_matrix4x3(matrix) match_assert_valid_real_matrix4x3(__FILE__, __LINE__, matrix)
+#define assert_valid_real_matrix4x3_custom_string(matrix, custom_string) match_assert_valid_real_matrix4x3_custom_string(__FILE__, __LINE__, matrix, custom_string)
 
 /* ---------- structures */
 
@@ -404,6 +338,13 @@ union real_argb_color
 };
 typedef union real_argb_color real_argb_color;
 
+union real_hsv_color
+{
+	real n[3];
+	struct { real hue, saturation, value; };
+};
+typedef union real_hsv_color real_hsv_color;
+
 /* ---------- prototypes/REAL_MATH.C */
 
 void real_math_initialize(void);
@@ -415,6 +356,7 @@ real_vector3d *perpendicular3d(real_vector3d const *a, real_vector3d *result);
 real_vector4d *perpendicular4d(real_vector4d const *a, real_vector4d *result);
 
 real_vector3d *rotate_vector_about_axis(real_vector3d *v, real_vector3d const *n, real sine, real cosine);
+boolean pin_normal_to_cone3d(real_vector3d const *normal, real_vector3d const *direction, real sine, real cosine, real_vector3d *result);
 
 void vectors_interpolate(real_vector3d const *a, real_vector3d const *b, real t, real_vector3d *result);
 void points_interpolate(real_point3d const *a, real_point3d const *b, real t, real_point3d *result);
@@ -429,7 +371,11 @@ void quaternions_interpolate(real_quaternion const *q0, real_quaternion const *q
 void quaternion_transform_point(real_quaternion const *q, real_point3d const *p, real_point3d *result);
 
 void vectors3d_from_euler_angles3d(real_vector3d *forward, real_vector3d *up, real_euler_angles3d const *angles);
+real vector_to_line_distance_squared3d(real_point3d const *point, real_vector3d const *vector, real_point3d const *base, real_vector3d const *height);
+boolean pill_test_vector3d(real_point3d const *base, real height, real width, real_point3d const *point, real_vector3d const *vector, real *t_reference, real_vector3d *normal);
 boolean fast_vector_intersects_sphere(real_point3d const *point, real_vector3d const *vector, real_point3d const *center, real radius);
+real fast_vector_intersection_with_sphere(real_point3d const *point, real_vector3d const *vector, real_point3d const *center, real radius);
+boolean point_in_triangle2d(real_point2d const *point, real_point2d const *p0, real_point2d const *p1, real_point2d const *p2, real *s, real *t);
 
 boolean point_in_rectangle2d(real_point2d const *point, real_rectangle2d const *bounds);
 boolean point_in_rectangle3d(real_point3d const *point, real_rectangle3d const *bounds);
@@ -437,13 +383,6 @@ boolean point_in_rectangle3d(real_point3d const *point, real_rectangle3d const *
 boolean vector_intersects_rectangle2d(real_point2d const *point, real_vector2d const *vector, real_rectangle2d const *bounds);
 boolean vector_intersects_rectangle3d(real_point3d const *point, real_vector3d const *vector, real_rectangle3d const *bounds);
 boolean pill_intersects_rectangle3d(real_point3d const *base, real_vector3d const *height, real width, real_rectangle3d const *bounds);
-
-real_vector2d *fast_normalize2d(real_vector2d *v);
-real_vector3d *fast_normalize3d(real_vector3d *v);
-
-real cross_product_magnitude3d(real_vector3d const *a, real_vector3d const *b);
-
-real dequantize_byte_to_real(real min, real max, unsigned char value);
 
 real signed_angle_between_vectors2d(real_vector2d const *a, real_vector2d const *b);
 real angle_between_vectors2d(real_vector2d const *a, real_vector2d const *b);
@@ -477,8 +416,6 @@ boolean line_from_planes3d(real_plane3d const *plane0, real_plane3d const *plane
 boolean point_from_planes3d(real_plane3d const *plane0, real_plane3d const *plane1, real_plane3d const *plane2, real_point3d *point);
 
 boolean sphere_test_vector3d(real_point3d const *center, real radius, real_point3d const *point, real_vector3d const *vector, real *t, real_vector3d *normal);
-
-boolean valid_real_sine_cosine(real sine, real cosine);
 
 boolean accelerate_to_position(
 	real *position_reference,
@@ -536,8 +473,9 @@ void unlock_global_random_seed(void);
 
 unsigned long *get_global_random_seed_address(void);
 unsigned long *get_global_local_random_seed_address(void);
+unsigned long get_random_seed(void);
 
-unsigned short seed_random(unsigned long *seed);
+word seed_random(unsigned long *seed);
 short seed_random_range(unsigned long *seed, short lower_bound, short upper_bound);
 
 real real_seed_random(unsigned long *seed);
@@ -550,28 +488,94 @@ real_vector3d *seed_random_vector_in_cone3d(unsigned long *seed, real_vector3d c
 
 extern short const global_projection3d_mappings[3][2][2];
 
-extern const real_point3d *const global_origin3d;
+extern real_point2d const *global_origin2d;
+extern real_point2d const *global_x_axis2d;
+extern real_point2d const *global_y_axis2d;
+extern real_point2d const *global_negative_x_axis2d;
+extern real_point2d const *global_negative_y_axis2d;
 
-extern const real_point3d *const global_x_axis3d;
-extern const real_point3d *const global_y_axis3d;
-extern const real_point3d *const global_z_axis3d;
-extern const real_point3d *const global_negative_x_axis3d;
-extern const real_point3d *const global_negative_y_axis3d;
-extern const real_point3d *const global_negative_z_axis3d;
+extern real_vector2d const *global_zero_vector2d;
+extern real_vector2d const *global_forward2d;
+extern real_vector2d const *global_left2d;
+extern real_vector2d const *global_backward2d;
+extern real_vector2d const *global_right2d;
 
-extern const real_vector3d *const global_zero_vector3d;
+extern real_point3d const *global_origin3d;
+extern real_point3d const *global_x_axis3d;
+extern real_point3d const *global_y_axis3d;
+extern real_point3d const *global_z_axis3d;
+extern real_point3d const *global_negative_x_axis3d;
+extern real_point3d const *global_negative_y_axis3d;
+extern real_point3d const *global_negative_z_axis3d;
 
-extern const real_vector3d *const global_forward3d;
-extern const real_vector3d *const global_left3d;
-extern const real_vector3d *const global_up3d;
+extern real_vector3d const *global_zero_vector3d;
+extern real_vector3d const *global_forward3d;
+extern real_vector3d const *global_left3d;
+extern real_vector3d const *global_up3d;
+extern real_vector3d const *global_backward3d;
+extern real_vector3d const *global_right3d;
+extern real_vector3d const *global_down3d;
 
-extern const real_vector3d *const global_backward3d;
-extern const real_vector3d *const global_right3d;
-extern const real_vector3d *const global_down3d;
+extern real_euler_angles2d const *global_zero_angles2d;
+extern real_euler_angles3d const *global_zero_angles3d;
 
-extern const real_quaternion *const global_identity_quaternion;
+extern real_quaternion const *global_identity_quaternion;
+extern real_matrix4x3 const *global_identity4x3;
+extern real_matrix4x3 const *global_negative_identity4x3;
+
+extern real_rectangle2d const *global_null_rectangle2d;
+extern real_rectangle3d const *global_null_rectangle3d;
 
 /* ---------- public code */
+
+__inline long fast_ftol(
+	real d)
+{
+	long result;
+
+	__asm
+	{
+		fld d
+		fistp result
+	}
+
+	return result;
+}
+
+// truncates toward zero like a C cast, fast_ftol rounds to nearest
+// This is likely ASM because it's not inlined and exactly the same in sapien
+__inline long fast_ftol_C(
+	real x)
+{
+	long result;
+
+	__asm
+	{
+		mov ecx, x				// keep the sign of x
+		fld x
+		fist result				// result = x rounded to nearest
+		fisub result
+		fstp x					// x = x - result, the rounding error
+		test ecx, ecx
+		js negative
+		add x, 0x7FFFFFFF		// carry if the error is below zero (rounded up)...
+		sbb result, 0			// ...then step back down
+		jmp done
+	}
+
+negative:
+	__asm
+	{
+		mov edx, x
+		xor ecx, ecx
+		test edx, edx
+		setg cl					// error above zero (rounded down)...
+		add result, ecx			// ...then step back up
+	}
+
+done:
+	return result;
+}
 
 __inline real sine(
 	real angle)
@@ -727,7 +731,7 @@ __inline real normalize2d(
 {
 	real magnitude = magnitude2d(v);
 
-	if (!(_real_epsilon>fabs(magnitude-0.f)))
+	if (!realcmp(magnitude, 0.f))
 	{
 		scale_vector2d(v, 1.f / magnitude, v);
 	}
@@ -737,6 +741,19 @@ __inline real normalize2d(
 	}
 
 	return magnitude;
+}
+
+__inline real_vector2d *fast_normalize2d(
+	real_vector2d *v)
+{
+	real magnitude_squared = magnitude_squared2d(v);
+
+	if (magnitude_squared != 0.f)
+	{
+		scale_vector2d(v, 1.f / square_root(magnitude_squared), v);
+	}
+
+	return v;
 }
 
 __inline boolean limit2d(
@@ -763,8 +780,7 @@ __inline real distance2d(
 	real_point2d const *a,
 	real_point2d const *b)
 {
-	real_vector2d v;
-	return magnitude2d(vector_from_points2d(a, b, &v));
+	return square_root(distance_squared2d(a, b));
 }
 
 __inline real dot_product2d(
@@ -944,7 +960,7 @@ __inline real normalize3d(
 {
 	real magnitude = magnitude3d(v);
 
-	if (!(_real_epsilon>fabs(magnitude-0.f)))
+	if (!realcmp(magnitude, 0.f))
 	{
 		scale_vector3d(v, 1.f / magnitude, v);
 	}
@@ -954,6 +970,19 @@ __inline real normalize3d(
 	}
 
 	return magnitude;
+}
+
+__inline real_vector3d *fast_normalize3d(
+	real_vector3d *v)
+{
+	real magnitude_squared = magnitude_squared3d(v);
+
+	if (magnitude_squared != 0.f)
+	{
+		scale_vector3d(v, 1.f / square_root(magnitude_squared), v);
+	}
+
+	return v;
 }
 
 __inline boolean limit3d(
@@ -1052,6 +1081,15 @@ __inline real_vector3d *cross_product3d(
 	return result;
 }
 
+__inline real cross_product_magnitude3d(
+	real_vector3d const *a,
+	real_vector3d const *b)
+{
+	real_vector3d c;
+	cross_product3d(a, b, &c);
+	return magnitude3d(&c);
+}
+
 __inline real triple_product3d(
 	real_vector3d const *a,
 	real_vector3d const *b,
@@ -1126,6 +1164,14 @@ __inline real plane2d_distance_to_point(
 	real_point2d const *point)
 {
 	return (plane->n.i*point->x + plane->n.j*point->y) - plane->d;
+}
+
+__inline real vector_intersect_plane2d(
+	real_point2d const *point,
+	real_vector2d const *vector,
+	real_plane2d const *plane)
+{
+	return -(plane2d_distance_to_point(plane, point) / dot_product2d(vector, &plane->n));
 }
 	
 __inline real point_to_line_distance3d(
@@ -1310,14 +1356,20 @@ __inline short local_random_range(
 __inline real real_local_random(
 	void)
 {
-	return real_seed_random(get_global_local_random_seed_address());
+	// This temporary exists in sapien /Od
+	real result = real_seed_random(get_global_local_random_seed_address());
+
+	return result;
 }
 
 __inline real real_local_random_range(
 	real lower_bound,
 	real upper_bound)
 {
-	return real_seed_random_range(get_global_local_random_seed_address(), lower_bound, upper_bound);
+	// This temporary exists in sapien /Od
+	real result = real_seed_random_range(get_global_local_random_seed_address(), lower_bound, upper_bound);
+
+	return result;
 }
 
 __inline real_vector3d *local_random_direction3d(
@@ -1356,30 +1408,26 @@ __inline real uniform_cubic_spline(
 	return (((((((t - ((h * 2.f) + t0)) * f3) / (h * 3.f)) + f2) * (t - (t0 + h))) / (h * 2.f)) + f1) * (t - t0) / h + f0;
 }
 
-// TODO: doesn't match, needs cleanup
 __inline real nonuniform_cubic_spline(
 	real f0,
 	real f1,
-	real f2, 
+	real f2,
 	real f3,
-	real t0, 
-	real t1, 
-	real t2, 
-	real t3, 
+	real t0,
+	real t1,
+	real t2,
+	real t3,
 	real t)
 {
-	real v9, v10, v11;
-	v10 = ((f2 - f1) / (t2 - t1)) - ((f1 - f0) / (t1 - t0));
-	v11 = (((((((((((f3 - f2) / (t3 - t2)) - ((f2 - f1) 
-		/ (t2 - t1))) / (t3 - t1)) - (v10 / (t2 - t0))) 
-		/ (t3 - t0))
-		* (v9 - t2))
-		+ (v10 / (t2 - t0)))
-		* (v9 - t1))
-		+ ((f1 - f0) / (t1 - t0)))
-		* (v9 - t0))
-		 + f0;
-	return v11;
+	match_assert("..\\math\\real_math.h", 1530, t>= t0 && t <= t3);
+
+	f3 = (f3 - f2) / (t3 - t2);
+	f2 = (f2 - f1) / (t2 - t1);
+	f1 = (f1 - f0) / (t1 - t0);
+	f3 = (f3 - f2) / (t3 - t1);
+	f2 = (f2 - f1) / (t2 - t0);
+	f3 = (f3 - f2) / (t3 - t0);
+	return ((f3 * (t - t2) + f2) * (t - t1) + f1) * (t - t0) + f0;
 }
 
 __inline void uniform_cubic_spline_vector3d(
@@ -1399,63 +1447,26 @@ __inline void uniform_cubic_spline_vector3d(
 	return;
 }
 
-// TODO: doesn't match, needs cleanup. uses above inlines
 __inline void nonuniform_cubic_spline_vector3d(
 	real_vector3d *result,
-	real_vector3d const *f0, 
+	real_vector3d const *f0,
 	real_vector3d const *f1,
 	real_vector3d const *f2,
-	real_vector3d const *f3, 
-	real t0, 
-	real t1, 
+	real_vector3d const *f3,
+	real t0,
+	real t1,
 	real t2,
 	real t3,
 	real t)
 {
-	real v10, v11, v12, v13, v14, v15, v16, v17, v18, v19, v20;
-	v10 = t3 - t2;
-	v11 = t2 - t1;
-	v12 = t1 - t0;
-	v13 = t3 - t1;
-	v14 = t2 - t0;
-	v15 = t3 - t0;
-	v16 = t - t2;
-	v17 = t - t1;
-	v18 = t - t0;
+	result->i = nonuniform_cubic_spline(f0->i, f1->i, f2->i, f3->i, t0, t1, t2, t3, t);
+	result->j = nonuniform_cubic_spline(f0->j, f1->j, f2->j, f3->j, t0, t1, t2, t3, t);
+	result->k = nonuniform_cubic_spline(f0->k, f1->k, f2->k, f3->k, t0, t1, t2, t3, t);
 
-	result->i = (((((((((((f3->i - f2->i) / v10) - ((f2->i - f1->i) / v11)) / v13)
-		- ((((f2->i - f1->i) / v11) - ((f1->i - f0->i) / v12)) / v14))
-		/ v15)
-		* v16)
-		+ ((((f2->i - f1->i) / v11) - ((f1->i - f0->i) / v12)) / v14))
-		* v17)
-		+ ((f1->i - f0->i) / v12))
-		* v18)
-		+ f0->i;
-
-	result->j = (((((((((((f3->j - f2->j) / v10) - ((f2->j - f1->j) / v11)) / v13)
-		- ((((f2->j - f1->j) / v11) - ((f1->j - f0->j) / v12)) / v14))
-		/ v15)
-		* v16)
-		+ ((((f2->j - f1->j) / v11) - ((f1->j - f0->j) / v12)) / v14))
-		* v17)
-		+ ((f1->j - f0->j) / v12))
-		* v18)
-		+ f0->j;
-
-	v19 = (((f3->k - f2->k) / v10) - ((f2->k - f1->k) / v11));
-	v20 = (((f2->k - f1->k) / v11) - ((f1->k - f0->k) / v12));
-
-	result->k = ((((((((v19 / v13) - (v20 / v14)) / v15) * v16) + (v20 / v14)) * v17) + ((f1->k - f0->k) / v12))
-				* v18)
-				+ f0->k;
+	return;
 }
 
-__inline boolean valid_real(
-	real n)
-{
-	return (*(long *)&n & 0x7F800000) != 0x7F800000;
-}
+boolean valid_real(real n);
 
 __inline boolean valid_realcmp(
 	real a,
@@ -1463,6 +1474,12 @@ __inline boolean valid_realcmp(
 {
 	real y = a - b;
 	return valid_real(y) && fabs(y) < 0.001f;
+}
+
+__inline boolean valid_real(
+	real n)
+{
+	return (*(long *)&n & 0x7F800000) != 0x7F800000;
 }
 
 __inline boolean valid_real_point2d(
@@ -1481,6 +1498,13 @@ __inline boolean valid_real_vector3d(
 	real_vector3d const *v)
 {
 	return valid_real(v->i) && valid_real(v->j) && valid_real(v->k);
+}
+
+__inline boolean valid_real_sine_cosine(
+	real sine,
+	real cosine)
+{
+	return valid_realcmp(sine * sine + cosine * cosine, 1.0f);
 }
 
 __inline boolean valid_real_normal3d(
@@ -1523,6 +1547,34 @@ __inline boolean valid_real_matrix4x3(
 		valid_real(matrix->scale) &&
 		valid_real_vector3d_axes3(&matrix->forward, &matrix->left, &matrix->up) &&
 		valid_real_point3d(&matrix->position);
+}
+
+__inline boolean valid_real_rgb_color(
+	real_rgb_color const *color)
+{
+	return valid_real(color->red) && valid_real(color->green) && valid_real(color->blue) &&
+		color->red >= 0.f && color->red <= 1.f &&
+		color->green >= 0.f && color->green <= 1.f &&
+		color->blue >= 0.f && color->blue <= 1.f;
+}
+
+__inline boolean valid_real_argb_color(
+	real_argb_color const *color)
+{
+	return valid_real(color->alpha) && color->alpha >= 0.f && color->alpha <= 1.f && valid_real_rgb_color(&color->rgb);
+}
+
+__inline real dequantize_byte_to_real(
+	real min,
+	real max,
+	byte value)
+{
+	if (value == UNSIGNED_CHAR_MAX)
+	{
+		return max;
+	}
+
+	return (max-min) * ((real)value / 255.f) + min;
 }
 
 // TODO: depends on byte_rectangle3d, need to include integer_math?

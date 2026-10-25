@@ -27,6 +27,33 @@ enum
 	NUMBER_OF_PLAYER_POWERUPS,
 };
 
+enum
+{
+	_player_action_result_reload = 0,
+	_player_action_result_pickup_powerup,
+	_player_action_result_pickup_weapon,
+	_player_action_result_exit_vehicle,
+	_player_action_result_swap_for_grenades,
+	_player_action_result_swap_for_powerup,
+	_player_action_result_swap_for_weapon,
+	_player_action_result_add_weapon_to_inventory,
+	_player_action_result_enter_vehicle,
+	_player_action_result_evict_from_vehicle,
+	_player_action_result_touch_device,
+	_player_action_result_flip_vehicle,
+	NUMBER_OF_PLAYER_ACTION_RESULTS,
+};
+
+enum
+{
+	_player_respawn_failure_none = 0,
+	_player_respawn_failure_combat,
+	_player_respawn_failure_enemies,
+	_player_respawn_failure_moving,
+	_player_respawn_failure_vehicle,
+	NUMBER_OF_PLAYER_RESPAWN_FAILURES,
+};
+
 
 /* ---------- macros */
 
@@ -47,15 +74,15 @@ struct player_action
 	short pad;
 };
 
-struct network_player
+struct player_action_collection
 {
-	wchar_t name[12];
-	short primary_color_index;
-	short icon_index;
-	char machine_index;
-	char controller_index;
-	char team_index;
-	char player_list_index;
+	struct player_action actions[MAXIMUM_NUMBER_OF_LOCAL_PLAYERS];
+};
+
+struct game_update
+{
+	word number_of_actions;
+	struct player_action actions[NETWORK_GAME_MAXIMUM_PLAYER_COUNT];
 };
 
 struct multiplayer_player_info
@@ -117,13 +144,18 @@ real_vector3d *player_control_get_facing_direction(short local_player_index, rea
 real player_control_get_field_of_view(short local_player_index);
 real_euler_angles2d const *player_control_get_facing_angles(short local_player_index);
 long player_control_get_aiming_unit_index(short local_player_index);
+long player_control_get_target_object_index(short local_player_index);
 void player_control_get_unit_camera_info(short local_player_index, struct unit_camera_info *camera_info);
+real player_control_get_autoaim_level(short local_player_index);
+short player_control_get_zoom_level(short local_player_index);
 
 /* ---------- prototypes/PLAYERS.C */
 
 long player_new(long machine_index, long player_index, short local_player_index, struct network_player *network_player_data);
 void local_player_set_player_index(short local_player_index, long player_index);
 boolean players_respawn_coop(void);
+void players_handle_deleted_object(long deleted_object_index);
+short players_get_respawn_failure(void);
 
 boolean local_player_exists(long local_player_index);
 short local_player_count(void);
@@ -144,6 +176,14 @@ void players_reconnect_to_structure_bsp(void);
 void player_input_enable(boolean enable);
 
 /* ---------- prototypes/PLAYER_QUEUES_NEW.C */
+
+void update_server_add_player(long player_index);
+void update_client_add_player(long player_index);
+void update_client_handle_server_update(struct game_update *new_update, long update_number);
+void update_server_next_update(void);
+void update_server_build_server_update(long machine_index, struct game_update *update, long *update_number);
+void update_server_handle_client_update(long machine_index, struct player_action *actions);
+void update_client_build_client_update(struct player_action_collection *action_collection);
 
 void update_server_delete(void);
 boolean update_server_new(void);

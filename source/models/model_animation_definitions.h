@@ -226,6 +226,12 @@ struct animation_graph_unit_seat
 	struct tag_block weapon_classes;	// animation_graph_weapon_class
 };
 
+struct animation_graph_first_person_weapon_animations
+{
+	long unused1[4];
+	struct tag_block animations;		// animation_graph_animation_index
+};
+
 struct animation_graph_device_animations
 {
 	long unused[21];
@@ -347,6 +353,13 @@ extern char const *damage_direction_strings[];
 extern char const *damage_part_strings[];
 
 /* ---------- public code */
+
+__inline short animation_convert_frame_to_pal(
+	struct animation const *animation,
+	short frame)
+{
+	return frame;
+}
 
 __inline short animation_loop_frame_index(
 	struct animation const *animation)
