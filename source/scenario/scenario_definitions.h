@@ -151,13 +151,13 @@ struct scenario_light_fixture_datum
 
 struct scenario_weapon_datum
 {
-  struct scenario_object_datum object;
-  struct scenario_object_permutation permutation;
-  short rounds_total;
-  short rounds_loaded;
-  word flags;
-  word pad;
-  unsigned long unused[3];
+	struct scenario_object_datum object;
+	struct scenario_object_permutation permutation;
+	short rounds_total;
+	short rounds_loaded;
+	word flags;
+	word pad;
+	unsigned long unused[3];
 };
 
 
